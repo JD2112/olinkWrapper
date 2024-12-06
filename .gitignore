@@ -1,2 +1,4 @@
 .DS_Store
 app/www/
+app/extras
+app/rsconnect

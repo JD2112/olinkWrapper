@@ -49,7 +49,8 @@ ui <- page_sidebar(
   sidebar = sidebar(
     title = "Data Input",
     fileInput("npx_file", "Upload NPX Data (CSV)", accept = c(".csv")),
-    fileInput("key_file", "Upload Key File (CSV)", accept = c(".csv")),
+    #fileInput("key_file", "Upload Key File (CSV)", accept = c(".csv")),
+    fileInput("key_file", "Upload Key File (CSV, Optional)", accept = c(".csv")),
     fileInput("var_file", "Upload Variables File (CSV)", accept = c(".csv")),
     actionButton("merge_data", "Merge Data", class = "btn-primary"),
     HTML("<hr> <a href='ShinyOlink.txt' target='_blank'> <i class='fa fa-download'> </i> HOW TO USE</a>")
@@ -108,11 +109,11 @@ ui <- page_sidebar(
       class = "container footer-content",
       div(
         class = "footer-section footer-left",
-        "©2024, Jyotirmoy Das, Bioinformactics Core Facility, Linköping University"
+        "©2024, Jyotirmoy Das, Bioinformactics Unit, Core Facility & Clinical Genomics Linköping, Linköping University"
       ),
       div(
         class = "footer-section",
-        a("GitHub", href = "https://github.com/JD2112/OlinkShiny", target = "_blank")
+        a("GitHub repo: ShinyOlink", href = "https://github.com/JD2112/ShinyOlink", target = "_blank")
       ),
       div(
         class = "footer-section footer-right",
@@ -129,25 +130,67 @@ server <- function(input, output, session) {
   ttest_results <- reactiveVal()
   anova_results <- reactiveVal()
   
+  # # Merge data when the button is clicked
+  # observeEvent(input$merge_data, {
+  #   withProgress(message = 'Merging data...', value = 0, {
+  #   req(input$npx_file, input$key_file, input$var_file)
+    
+  #   npx_data <- read_NPX(input$npx_file$datapath)
+  #   key_data <- read_csv(input$key_file$datapath, col_types = cols()) %>%
+  #     distinct(SampleID, .keep_all = TRUE)
+  #   var_data <- read_csv(input$var_file$datapath, col_types = cols()) %>%
+  #     distinct(SUBJID, .keep_all = TRUE)
+    
+  #   key_data$SampleID <- as.character(key_data$SampleID)
+  #   if("SUBJID" %in% colnames(var_data)) {
+  #     var_data$SUBJID <- gsub("\n", "", var_data$SUBJID)
+  #   }
+    
+  #   merged <- npx_data %>%
+  #     left_join(key_data, by = "SampleID") %>%
+  #     left_join(var_data, by = "SUBJID")
+    
+  #   merged_data(merged)
+    
+  #   updateSelectInput(session, "pca_var", choices = colnames(merged))
+  #   updateSelectInput(session, "ttest_var", choices = colnames(merged))
+  #   updateSelectInput(session, "anova_var", choices = colnames(merged))
+  #   updateSelectInput(session, "volcano_var", choices = colnames(merged))
+  #   updateSelectInput(session, "violin_group", choices = colnames(merged))
+  #   updateSelectInput(session, "violin_protein", choices = unique(merged$Assay))
+  #   updateSelectInput(session, "normality_protein", choices = unique(merged$Assay))
+
+  #   incProgress(1)
+  #   })
+  # })
+
   # Merge data when the button is clicked
-  observeEvent(input$merge_data, {
-    withProgress(message = 'Merging data...', value = 0, {
-    req(input$npx_file, input$key_file, input$var_file)
+observeEvent(input$merge_data, {
+  withProgress(message = 'Merging data...', value = 0, {
+    req(input$npx_file, input$var_file)
     
     npx_data <- read_NPX(input$npx_file$datapath)
-    key_data <- read_csv(input$key_file$datapath, col_types = cols()) %>%
-      distinct(SampleID, .keep_all = TRUE)
     var_data <- read_csv(input$var_file$datapath, col_types = cols()) %>%
       distinct(SUBJID, .keep_all = TRUE)
     
-    key_data$SampleID <- as.character(key_data$SampleID)
     if("SUBJID" %in% colnames(var_data)) {
       var_data$SUBJID <- gsub("\n", "", var_data$SUBJID)
     }
     
-    merged <- npx_data %>%
-      left_join(key_data, by = "SampleID") %>%
-      left_join(var_data, by = "SUBJID")
+    if (!is.null(input$key_file)) {
+      key_data <- read_csv(input$key_file$datapath, col_types = cols()) %>%
+        distinct(SampleID, .keep_all = TRUE)
+      key_data$SampleID <- as.character(key_data$SampleID)
+      
+      merged <- npx_data %>%
+        left_join(key_data, by = "SampleID") %>%
+        left_join(var_data, by = "SUBJID")
+    } else {
+      # If key_file is not provided, assume SampleID in npx_data corresponds to SUBJID
+      merged <- npx_data %>%
+        mutate(SUBJID = SampleID) %>%
+        left_join(var_data, by = "SUBJID")
+    }
     
     merged_data(merged)
     
@@ -160,8 +203,8 @@ server <- function(input, output, session) {
     updateSelectInput(session, "normality_protein", choices = unique(merged$Assay))
 
     incProgress(1)
-    })
   })
+})
   
   # Data Preview
   output$data_preview <- renderDT({

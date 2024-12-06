@@ -5,6 +5,6 @@ account: jyotirmoydas
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13538516
-bundleId: 9472929
+bundleId: 9476711
 url: https://jyotirmoydas.shinyapps.io/ShinyOlink/
 version: 1
