@@ -35,14 +35,6 @@ shiny::runApp("app.R")
 8. Volcano plot
 9. Violin plot for selected proteins
 
-All of these features are now accessible through a modern, responsive interface using the bslib package, with a sidebar for data input and separate tabs for each analysis type.
-
-As you continue to use the app, here are a few suggestions:
-
-1. Thoroughly test the app with different datasets to ensure it handles various data structures and edge cases.
-2. Consider adding error handling and informative messages for users if something goes wrong (e.g., if a file is in the wrong format or if an analysis can't be performed due to data characteristics).
-3. If you plan to share this app with colleagues, you might want to add some documentation or help text to guide users through the different analyses.
-4. Keep an eye on the performance, especially with larger datasets. If you notice any slowdowns, you might need to optimize some of the data processing or consider using reactive expressions for computations that are used in multiple places.
 
 ## Credits
 - Main Author: 
