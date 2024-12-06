@@ -1,8 +1,7 @@
-# Shiny for WGCNA
+# Shiny for Olink Data Analysis
 (Under active development)
 
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14283132.svg)](https://doi.org/10.5281/zenodo.14283132)
 [![GitHub Invite Collaborators](https://img.shields.io/badge/Invite-Collaborators-blue?style=for-the-badge&logo=github)](https://github.com/JD2112/ShinyWGCNA/settings/access)
 
 This Shiny app provides a user-friendly interface for performing **Weighted Gene Co-expression Network Analysis (WGCNA)** on **RNA-seq/Microarray** and **DNA methylation** (Array/Sequencing) data. It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs.
