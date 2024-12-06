@@ -1,7 +1,7 @@
 # Shiny for Olink Data Analysis
 (Under active development)
 
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14287630.svg)](https://doi.org/10.5281/zenodo.14287630)
 [![GitHub Invite Collaborators](https://img.shields.io/badge/Invite-Collaborators-blue?style=for-the-badge&logo=github)](https://github.com/JD2112/ShinyWGCNA/settings/access)
 
 This Shiny app provides a user-friendly interface for performing quick analysis of Olink data using [OlinkAnalyze package](https://github.com/Olink-Proteomics/OlinkRPackage). It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs.
@@ -47,7 +47,7 @@ See OlinkAnalyze package [https://github.com/Olink-Proteomics/OlinkRPackage](htt
 
 ## Citation
 
-Das, J. (2024). ShinyOlink (v1.1). Zenodo. 
+Jyotirmoy Das. (2024). JD2112/ShinyOlink: ShinyOlink (v1.0). Zenodo. https://doi.org/10.5281/zenodo.14287630
 
 ## Acknowledgement
 
