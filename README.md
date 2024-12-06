@@ -6,9 +6,11 @@
 
 This Shiny app provides a user-friendly interface for performing **Weighted Gene Co-expression Network Analysis (WGCNA)** on **RNA-seq/Microarray** and **DNA methylation** (Array/Sequencing) data. It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs.
 
-## Input Data
-RNA-seq Data: Upload a CSV file with genes as columns and samples as rows. The first column should contain sample names.
-DNA Methylation Data: Upload a CSV file with the same structure as the RNA-seq data, containing methylation values.
+## Data Upload and Merging
+In the sidebar, you'll find three file upload buttons:
+  - Upload NPX Data (CSV) - needs to have **SampleID** column
+  - Upload Key File (CSV) - needs to have **SampleID** and **SUBJID** columns
+  - Upload Variables File (CSV) - needs to have **SUBJID** columns
 
 ## How to run locally
 ```
