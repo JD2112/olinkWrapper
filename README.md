@@ -4,7 +4,7 @@
 
 [![GitHub Invite Collaborators](https://img.shields.io/badge/Invite-Collaborators-blue?style=for-the-badge&logo=github)](https://github.com/JD2112/ShinyWGCNA/settings/access)
 
-This Shiny app provides a user-friendly interface for performing **Weighted Gene Co-expression Network Analysis (WGCNA)** on **RNA-seq/Microarray** and **DNA methylation** (Array/Sequencing) data. It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs.
+This Shiny app provides a user-friendly interface for performing quick analysis of Olink data using [OlinkAnalyze package](https://github.com/Olink-Proteomics/OlinkRPackage). It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs.
 
 ## Data Upload and Merging
 In the sidebar, you'll find three file upload buttons:
@@ -49,6 +49,9 @@ As you continue to use the app, here are a few suggestions:
     - Jyotirmoy Das ([@JD2112](https://github.com/JD2112))
 
 - Collaborators: ()
+
+## References
+See OlinkAnalyze package [https://github.com/Olink-Proteomics/OlinkRPackage](https://github.com/Olink-Proteomics/OlinkRPackage)
 
 ## Citation
 
