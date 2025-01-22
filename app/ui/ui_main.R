@@ -1,3 +1,14 @@
+# Source UI components
+source("ui/ui_data_input.R")
+source("ui/ui_data_preview.R")
+source("ui/ui_descriptive_stats.R")
+source("ui/ui_normality_test.R")
+source("ui/ui_pca_plot.R")
+source("ui/ui_ttest.R")
+source("ui/ui_violin_plot.R")
+source("ui/ui_volcano_plot.R")
+source("ui/ui_anova.R")
+
 ui <- page_sidebar(
   theme = bs_theme(version = 5, bootswatch = "flatly"),
   

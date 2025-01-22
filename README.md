@@ -21,7 +21,7 @@ shiny::runApp("app.R")
 
 ### Online webserver
 
-[https://jyotirmoydas.shinyapps.io/ShinyOlink/](https://jyotirmoydas.shinyapps.io/ShinyOlink/)
+[https://shinyolink.serve.scilifelab.se/app/shinyolink](https://shinyolink.serve.scilifelab.se/app/shinyolink)
 
 ## Highlights
 
@@ -52,4 +52,4 @@ Jyotirmoy Das. (2024). JD2112/ShinyOlink: ShinyOlink (v1.0). Zenodo. https://doi
 
 ## Acknowledgement
 
-We would like to acknowledge the **Core Facility, Faculty of Medicine and Health Sciences, Linköping University, Linköping, Sweden** and **Clinical Genomics Linköping, Science for Life Laboratory, Sweden** for their support.
+We would like to acknowledge the **Core Facility, Faculty of Medicine and Health Sciences, Linköping University, Linköping, Sweden** and **Clinical Genomics Linköping, Science for Life Laboratory, Sweden** for their support. 

@@ -1,4 +1,5 @@
 .DS_Store
 /app/www/
 /app/extras/*
-/app/rsconnect/
+./app/rsconnect/
+renv/
