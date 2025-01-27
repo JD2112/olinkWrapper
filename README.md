@@ -41,7 +41,6 @@ shiny::runApp("app.R")
     - Jyotirmoy Das ([@JD2112](https://github.com/JD2112))
 
 - Collaborators: 
-    - Debojyoti Das ([@BioDebojyoti]()https://github.com/BioDebojyoti)
 
 ## References
 See OlinkAnalyze package [https://github.com/Olink-Proteomics/OlinkRPackage](https://github.com/Olink-Proteomics/OlinkRPackage)
