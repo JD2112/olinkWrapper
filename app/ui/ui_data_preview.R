@@ -1,3 +1,8 @@
 data_preview_ui <- function() {
-  DTOutput("data_preview")
+  tagList(
+    downloadButton("download_full_data", "Download Full Dataset"),
+    br(),
+    br(),
+    DTOutput("data_preview")
+  )
 }
