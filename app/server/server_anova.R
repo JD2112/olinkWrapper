@@ -33,7 +33,14 @@ anova_server <- function(input, output, session, merged_data, anova_results) {
         results <- olink_anova(data_for_test, variable = input$anova_var, covariates = covariates)
       }
       
-      anova_results(results)  # Store results in reactive value
+      # Store results and model details in reactive value
+      anova_results(list(
+        results = results,
+        model_details = list(
+          variable = input$anova_var,
+          covariates = covariates
+        )
+      ))
       
       output$anova_output <- renderDT({
         datatable(results, options = list(scrollX = TRUE))
@@ -46,7 +53,7 @@ anova_server <- function(input, output, session, merged_data, anova_results) {
     filename = function() { paste("anova_results_", Sys.Date(), ".xlsx", sep="") },
     content = function(file) {
       req(anova_results())
-      write_xlsx(list(anova_results = anova_results()), file)
+      write_xlsx(list(anova_results = anova_results()$results), file)
     }
   )
 }
