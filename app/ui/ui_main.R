@@ -90,9 +90,9 @@ single_ui <- function() {
       "))
     ),
     
-    title = "ShinyOlink: Shiny Interface for Olink Data Analysis",
+    title = "olinkWrappeR: Shiny Interface for Olink Data Analysis",
     
-    h1("ShinyOlink: Shiny Interface for Olink Data Analysis", class = "text-center mb-4"),
+    h1("olinkWrappeR: Shiny Interface for Olink Data Analysis", class = "text-center mb-4"),
 
     sidebar = data_input_ui(),
     
@@ -148,11 +148,11 @@ single_ui <- function() {
         ),
         div(
           class = "footer-section",
-          a("GitHub repo: ShinyOlink", href = "https://github.com/JD2112/ShinyOlink", target = "_blank")
+          a("GitHub repo: olinkWrappeR", href = "https://github.com/JD2112/olinkWrappeR", target = "_blank")
         ),
         div(
           class = "footer-section footer-right",
-          "Version 1.1"
+          "Version 1.2"
         )
       )
     )
