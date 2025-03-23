@@ -4,6 +4,6 @@ authors:
 - family-names: Das
   given-names: Jyotirmoy
 orcid: https://orcid.org/0000-0002-5649-4658
-title: ShinyOlink
-version: v1.0
+title: olinkWrappeR
+version: v1.2
 date-released: 2024-12-06
