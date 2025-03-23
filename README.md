@@ -21,7 +21,7 @@ shiny::runApp("app.R")
 
 ### Online webserver
 
-[https://shinyolink.serve.scilifelab.se/app/shinyolink](https://shinyolink.serve.scilifelab.se/app/shinyolink)
+[https://olinkwrapper.serve.scilifelab.se/](https://olinkwrapper.serve.scilifelab.se/)
 
 ## Highlights
 
