@@ -21,7 +21,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: jd21/mybooklist
+          images: jd21/shinyolink
           tags: |
             type=raw,value={{date 'YYYYMMDD'}}        
       -
@@ -38,4 +38,4 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta.outputs.tags }} 
-            jd21/mybooklist:latest
+            jd21/shinyolink:latest
