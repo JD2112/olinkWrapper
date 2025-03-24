@@ -21,7 +21,7 @@ shiny::runApp("app.R")
 
 ### Online webserver
 
-[https://shinyolink.serve.scilifelab.se/app/shinyolink](https://shinyolink.serve.scilifelab.se/app/shinyolink)
+[https://olinkwrapper.serve.scilifelab.se/](https://olinkwrapper.serve.scilifelab.se/)
 
 ## Highlights
 
@@ -41,7 +41,7 @@ shiny::runApp("app.R")
     - Jyotirmoy Das ([@JD2112](https://github.com/JD2112))
 
 - Collaborators: 
-    - Debojyoti Das ([@BioDebojyoti]()https://github.com/BioDebojyoti)
+    - Debojyoti Das ([@BioDebojyoti](https://github.com/BioDebojyoti))
 
 ## References
 See OlinkAnalyze package [https://github.com/Olink-Proteomics/OlinkRPackage](https://github.com/Olink-Proteomics/OlinkRPackage)
@@ -52,4 +52,5 @@ Jyotirmoy Das. (2024). JD2112/ShinyOlink: ShinyOlink (v1.0). Zenodo. https://doi
 
 ## Acknowledgement
 
-We would like to acknowledge the **Core Facility, Faculty of Medicine and Health Sciences, Linköping University, Linköping, Sweden** and **Clinical Genomics Linköping, Science for Life Laboratory, Sweden** for their support. 
+I would like to acknowledge the **Core Facility, Faculty of Medicine and Health Sciences, Linköping University, Linköping, Sweden** and **Clinical Genomics Linköping, Science for Life Laboratory, Sweden** for their support to build this application and SciLifeLab data center to host the application on their server.
+
