@@ -3,3 +3,4 @@
 /app/extras/*
 /app/rsconnect/
 renv/
+/script/

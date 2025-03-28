@@ -144,15 +144,15 @@ single_ui <- function() {
         class = "container footer-content",
         div(
           class = "footer-section footer-left",
-          paste0("©", format(Sys.Date(), "%Y"), ", Jyotirmoy Das, Bioinformactics Unit, Core Facility & Clinical Genomics Linköping, Linköping University")
+          paste0("©", format(Sys.Date(), "%Y"), ", Developed & maintained by Jyotirmoy Das, Bioinformactics Unit, Core Facility & Clinical Genomics Linköping, Linköping University")
         ),
         div(
           class = "footer-section",
-          a("GitHub repo: olinkWrappeR", href = "https://github.com/JD2112/olinkWrappeR", target = "_blank")
+          a("GitHub repo: olinkWrappeR", href = "https://github.com/JD2112/shinyolink", target = "_blank")
         ),
         div(
           class = "footer-section footer-right",
-          "Version 1.2"
+          "Version 1.2.1"
         )
       )
     )

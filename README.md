@@ -7,17 +7,28 @@
 This Shiny app provides a user-friendly interface for performing quick analysis of Olink data using [OlinkAnalyze package](https://github.com/Olink-Proteomics/OlinkRPackage). It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs.
 
 ## Data Upload and Merging
+
+NOTE:
+- needs to change the separator from `;` to `,`.
+- should not be any space in the column name.
+- should not any special character or Swedish characters (Ö,Ä,Å) in the column name.
+
 In the sidebar, you'll find three file upload buttons:
   - Upload NPX Data (CSV) - needs to have **SampleID** column
   - Upload Key File (CSV) - needs to have **SampleID** and **SUBJID** columns
   - Upload Variables File (CSV) - needs to have **SUBJID** columns
 
 ## How to run locally
+
+### Using R
 ```
 R # laod R >= 4.3.1
 library(shiny)
 shiny::runApp("app.R")
 ```
+
+### Using Docker
+`docker run --rm -p 3838:3838 jd21/shinyolink:v1.2.1`
 
 ### Online webserver
 
@@ -48,7 +59,7 @@ See OlinkAnalyze package [https://github.com/Olink-Proteomics/OlinkRPackage](htt
 
 ## Citation
 
-Jyotirmoy Das. (2024). JD2112/ShinyOlink: ShinyOlink (v1.0). Zenodo. https://doi.org/10.5281/zenodo.14287630
+Das, J. (2025). olinkWrappeR (v1.2.1). Zenodo. [https://doi.org/10.5281/zenodo.15098644](https://doi.org/10.5281/zenodo.15098644)
 
 ## Acknowledgement
 
