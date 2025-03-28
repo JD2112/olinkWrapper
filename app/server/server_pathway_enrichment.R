@@ -1,6 +1,7 @@
 library(shiny)
 library(DT)
 library(OlinkAnalyze)
+library(clusterProfiler)
 
 pathway_enrichment_server <- function(input, output, session, merged_data, ttest_results, shared_enrichment_results) {
   
