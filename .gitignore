@@ -2,5 +2,6 @@
 /app/www/
 /app/extras/*
 /app/rsconnect/
+/app/rsconnect/
 renv/
 /script/
