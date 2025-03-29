@@ -152,7 +152,7 @@ single_ui <- function() {
         ),
         div(
           class = "footer-section footer-right",
-          "Version 1.2.1"
+          "Version 1.2.3"
         )
       )
     )
