@@ -26,6 +26,7 @@ source(file.path("server", "server_lme_plot.R"))
 source(file.path("server", "server_pathway_heatmap.R"))
 source(file.path("server", "server_qc_plot.R"))
 #source("server/server_plate_randomization.R")
+source(file.path("server", "server_linear_regression.R"))
 
 print("All server modules sourced")
 print("server_lme.R sourced successfully")
@@ -68,4 +69,6 @@ server_main <- function(input, output, session, merged_data, var_key_merged, tte
   safe_call(lme_plot_server, input, output, session, merged_data)
   safe_call(pathway_heatmap_server, input, output, session, shared_enrichment_results, ttest_results)
   safe_call(qc_plot_server, input, output, session, merged_data)
+  safe_call(linear_regression_server, input, output, session, merged_data)
+
 }

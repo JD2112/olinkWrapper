@@ -31,6 +31,8 @@ source("ui/ui_lme_plot.R")
 source("ui/ui_pathway_heatmap.R")
 source("ui/ui_qc_plot.R")
 #source("ui/ui_plate_randomization.R")
+source("ui/ui_linear_regression.R")
+
 
 single_ui <- function() {
   page_sidebar(
@@ -135,7 +137,9 @@ single_ui <- function() {
           nav_panel("8. Violin Plot", violin_plot_ui())
         )
       ),
-      nav_panel("F. Pathway Enrichment Analysis", pathway_enrichment_ui())
+      nav_panel("F. Pathway Enrichment Analysis", pathway_enrichment_ui()
+      ),
+      nav_panel("G. Linear Regression", linear_regression_ui())
     ),
     
     tags$footer(
@@ -152,7 +156,7 @@ single_ui <- function() {
         ),
         div(
           class = "footer-section footer-right",
-          "Version 1.2.3"
+          "Version 1.2.4"
         )
       )
     )

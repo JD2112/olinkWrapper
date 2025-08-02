@@ -10,6 +10,9 @@ library(lme4)
 library(lmerTest)
 library(shinyjs)
 library(DT)
+library(broom)
+library(purrr)
+
 
 # Source utility functions
 source("utilities.R")

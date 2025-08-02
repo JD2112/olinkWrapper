@@ -72,6 +72,8 @@ RUN R -e "\
     library(clusterProfiler); \
     library(org.Hs.eg.db); \
     library(enrichplot); \
+    library(broom); \
+    library(purrr); \
     sessionInfo(); \
     installed.packages()"
 
