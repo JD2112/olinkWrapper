@@ -32,7 +32,7 @@ shiny::runApp("app.R")
 
 ### Online webserver
 
-[https://olinkwrapper.serve.scilifelab.se/](https://olinkwrapper.serve.scilifelab.se/)
+[https://olink-wrapper.serve.scilifelab.se/](https://olink-wrapper.serve.scilifelab.se/)
 
 ## Highlights
 
@@ -47,12 +47,14 @@ shiny::runApp("app.R")
 9. Violin plot for selected proteins
 
 
+## For detailed instructions on using the app, please refer to the [Manual](https://jd2112.github.io/olinkWrapper/).
+
 ## Credits
 - Main Author: 
     - Jyotirmoy Das ([@JD2112](https://github.com/JD2112))
 
 - Collaborators: 
-    - Debojyoti Das ([@BioDebojyoti](https://github.com/BioDebojyoti))
+
 
 ## References
 See OlinkAnalyze package [https://github.com/Olink-Proteomics/OlinkRPackage](https://github.com/Olink-Proteomics/OlinkRPackage)
