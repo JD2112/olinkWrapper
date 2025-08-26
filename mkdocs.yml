@@ -1,8 +1,8 @@
 site_name: "olinkWrapper"
 site_author: Jyotirmoy Das
 site_description: "A Shiny app for Olink data analysis"
-site_url: "https://jd2112.github.io/ShinyOlink"
-repo_url: "https://github.com/JD2112/ShinyOlink"
+site_url: "https://jd2112.github.io/olinkWrapper"
+repo_url: "https://github.com/JD2112/olinkWrapper"
 theme:
   name: material
   custom_dir: docs/overrides
