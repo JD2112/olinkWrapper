@@ -45,10 +45,16 @@ This step is crucial for quality control when you have data from multiple Olink 
 This function applies methods to adjust NPX values, helping to reduce technical variation and make the data more comparable across samples.
 
 ### B.3 **LOD (Limit of Detection):** 
-Here, you can filter out proteins with NPX values below the assay's limit of detection. This ensures that you only analyze reliable measurements, improving the quality of your results.
+This tab allows you to integrate Limit of Detection (LOD) information into your dataset. 
+- **Automatic Handling:** The app automatically maps standard Olink metadata (SampleType, AssayType, etc.) and handles both `SampleID` and `Sample_ID` formats.
+- **Smart Detection:** If your input file already contains an `LOD` column, the app will use those values directly. If not, it will attempt to calculate the LOD using Olink's standard methodology (requires Negative Controls).
+- **Filtering:** You can identify and exclude proteins where a high percentage (e.g., >50%) of samples fall below the LOD to improve the robustness of downstream statistical analyses.
 
 ### B.4 **Outlier Detection:** 
-This tool helps you identify and optionally remove samples or assays that are statistically unusual, which may be due to experimental errors.
+This tool helps you identify samples that are statistically unusual, which may be due to experimental errors or biological outliers.
+- **UMAP Distances:** The app uses Uniform Manifold Approximation and Projection (UMAP) to visualize sample clusters and calculate distances between samples. 
+- **Automatic Highlighting:** Samples that fall beyond a specific standard deviation threshold are automatically highlighted as potential outliers.
+- **Exclusion:** You can exclude these samples with a single click, and they will be removed from all subsequent plots and statistical tests.
 
 ![](images/preprocessing_outlier_detection.png)
 
@@ -59,7 +65,9 @@ The app provides several common statistical tests to find meaningful differences
 ### C.1 **Normality Test:** 
 This test determines if your data follows a normal (bell-shaped) distribution. Many parametric tests, like the T-test and ANOVA, assume normality.
 
-**How to run:** Select your variables and click the "Normality Test" button to check the distribution of your data.
+- **Statistical Tests:** Choose between **Shapiro-Wilk** (best for small samples) and **Kolmogorov-Smirnov** (against a normal distribution) tests.
+- **Visual Feedback:** Each analysis generates both a **Histogram** (with a red density curve) and a **QQ-plot** to help you qualitatively assess normality.
+- **"All Proteins" Mode:** You can visualize the distribution of every single data point in your dataset at once to see the global data layout.
 
 ![](images/stat_normality.png)
 
@@ -163,15 +171,12 @@ This plot helps you assess the quality of your data, often by showing the overal
 A general heatmap that displays the expression of many proteins across many samples, allowing you to see global patterns and clusters of co-expressed proteins.
 
 ### E.7 **Volcano Plot:** 
-A key visualization for T-test or Wilcoxon results. It plots the statistical significance (p-value) against the magnitude of change (fold change or effect size) for all proteins, making it easy to spot significant differences.
+A key visualization for T-test or Wilcoxon results. It plots the statistical significance against the magnitude of change (estimate) for all proteins.
 
-- Go to the "Volcano Plot" tab.
-- Select a grouping variable and its type.
-- Click "Generate Volcano Plot" to create the plot.
-- Use the "Download Plot" button to save the Volcano plot.
-
-!!! tip "Volcano Plot"
-    Please ensure you have run either the T-test or Wilcoxon test before attempting to create a Volcano Plot, as it relies on the results from those analyses.
+- **Dynamic P-value Selection:** Choose to plot either **Adjusted P-values (FDR)** or **Unadjusted P-values** on the Y-axis. The significance threshold line and point colors will update automatically.
+- **Flexible Threshold:** Adjust the significance threshold (e.g., 0.05 vs 0.01) to see the horizontal line and highlighted proteins move in real-time.
+- **Custom Coloring:** Significant proteins are highlighted in **Red**, while non-significant ones are in **Grey**, making it easy to identify relevant biomarkers.
+- **Smart Annotation:** Toggle protein labels to annotate the top significant proteins using `ggrepel` to ensure labels don't overlap.
 
 ![](images/visualization_volcano.png)
 

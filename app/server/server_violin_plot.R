@@ -1,4 +1,13 @@
 violin_plot_server <- function(input, output, session, merged_data) {
+  # Update choices when data is loaded
+  observe({
+    req(merged_data())
+    vars <- colnames(merged_data())
+    proteins <- unique(merged_data()$Assay)
+    updateSelectInput(session, "violin_group", choices = vars)
+    updateSelectInput(session, "violin_protein", choices = proteins)
+  })
+
   observeEvent(input$run_violin, {
     withProgress(message = 'Generating Violin plot...', value = 0, {
       req(merged_data(), input$violin_protein, input$violin_group)

@@ -12,6 +12,9 @@ library(shinyjs)
 library(DT)
 library(broom)
 library(purrr)
+library(ggrepel)
+library(patchwork)
+
 
 
 # Source utility functions

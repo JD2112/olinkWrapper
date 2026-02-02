@@ -1,4 +1,14 @@
 ttest_server <- function(input, output, session, merged_data, ttest_results) {
+  
+  # Update grouping variable choices when data is loaded
+  observe({
+    req(merged_data())
+    vars <- colnames(merged_data())
+    # Filter for columns that might be grouping variables (not too many unique values)
+    # But for now, let's just provide all columns.
+    updateSelectInput(session, "ttest_var", choices = vars)
+  })
+
   observeEvent(input$run_ttest, {
     print("T-test button clicked")
     withProgress(message = 'Running T-Test...', value = 0, {
@@ -6,9 +16,14 @@ ttest_server <- function(input, output, session, merged_data, ttest_results) {
         req(merged_data(), input$ttest_var)
         data_for_test <- merged_data()
         
-        print("T-test input variable:")
-        print(input$ttest_var)
+        # Check if the grouping variable exists and has exactly 2 levels
+        group_vals <- data_for_test[[input$ttest_var]]
+        unique_vals <- unique(group_vals[!is.na(group_vals)])
         
+        if (length(unique_vals) != 2) {
+          stop(paste("Grouping variable", input$ttest_var, "must have exactly 2 levels. Found:", paste(unique_vals, collapse = ", ")))
+        }
+
         if (input$ttest_var_type == "Factor") {
           data_for_test[[input$ttest_var]] <- as.factor(data_for_test[[input$ttest_var]])
         } else {
@@ -18,12 +33,11 @@ ttest_server <- function(input, output, session, merged_data, ttest_results) {
         print("Running olink_ttest function")
         results <- olink_ttest(data_for_test, variable = input$ttest_var)
         
-        print("T-test results structure:")
-        print(str(results))
-        
+        if (nrow(results) == 0) {
+          stop("T-test returned no results. Check if data is properly normalized and group sizes are sufficient.")
+        }
+
         ttest_results(results)  # Store results in reactive value
-        
-        print("ttest_results updated")
         
         output$ttest_output <- renderDT({
           datatable(results, 
@@ -46,10 +60,8 @@ ttest_server <- function(input, output, session, merged_data, ttest_results) {
         })
         
         incProgress(1)
-        
-        print("T-test completed successfully")
+        showNotification("T-test completed successfully", type = "message")
       }, error = function(e) {
-        print(paste("Error in T-Test:", e$message))
         showNotification(paste("Error in T-Test:", e$message), type = "error")
       })
     })
@@ -62,10 +74,4 @@ ttest_server <- function(input, output, session, merged_data, ttest_results) {
       write_xlsx(list(ttest_results = ttest_results()), file)
     }
   )
-  
-  # Add an observer to check ttest_results
-  observe({
-    print("Checking ttest_results:")
-    print(str(ttest_results()))
-  })
 }

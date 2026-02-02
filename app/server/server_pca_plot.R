@@ -1,4 +1,11 @@
 pca_plot_server <- function(input, output, session, merged_data) {
+  # Update choices when data is loaded
+  observe({
+    req(merged_data())
+    vars <- colnames(merged_data())
+    updateSelectInput(session, "pca_var", choices = vars)
+  })
+
   observeEvent(input$run_pca, {
     withProgress(message = 'Generating PCA plot...', value = 0, {
       req(merged_data(), input$pca_var)

@@ -1,2 +1,5 @@
 site/
 *.sh
+notes.md
+questions.md
+Dockerfiles/

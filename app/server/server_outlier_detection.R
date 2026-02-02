@@ -7,13 +7,23 @@ library(tibble)
 
 outlier_detection_server <- function(input, output, session, merged_data) {
   
+  # Reactive value to store outlier IDs
+  detected_outlier_ids <- reactiveVal(NULL)
+  
   observeEvent(input$detect_outliers, {
     req(merged_data())
     
     withProgress(message = 'Detecting outliers...', value = 0, {
       tryCatch({
+        data <- merged_data()
+        
+        # Column Name Normalization
+        if (!"SampleID" %in% colnames(data) && "Sample_ID" %in% colnames(data)) {
+           data <- data %>% rename(SampleID = Sample_ID)
+        }
+        
         # Remove assays with all NA values
-        valid_data <- merged_data() %>%
+        valid_data <- data %>%
           group_by(Assay) %>%
           filter(!all(is.na(NPX))) %>%
           ungroup()
@@ -27,20 +37,21 @@ outlier_detection_server <- function(input, output, session, merged_data) {
         # Check for missing values
         missing_proportion <- sum(is.na(umap_data)) / prod(dim(umap_data))
         
-        if (missing_proportion > 0.5) {
+        if (missing_proportion > 0.8) {
           stop(paste0("Too many missing values (", round(missing_proportion * 100, 2), "%). Cannot perform outlier detection."))
         }
         
         # Impute missing values with column medians
-        umap_data <- apply(umap_data, 2, function(x) {
+        umap_data_filled <- apply(umap_data, 2, function(x) {
+          if (all(is.na(x))) return(rep(0, length(x)))
           ifelse(is.na(x), median(x, na.rm = TRUE), x)
         })
         
         # Ensure all values are numeric
-        umap_data <- apply(umap_data, 2, as.numeric)
+        umap_data_filled <- apply(umap_data_filled, 2, as.numeric)
         
         # Run UMAP
-        umap_result <- umap(umap_data)
+        umap_result <- umap(umap_data_filled)
         
         umap_coords <- as.data.frame(umap_result$layout)
         colnames(umap_coords) <- c("UMAP1", "UMAP2")
@@ -60,6 +71,10 @@ outlier_detection_server <- function(input, output, session, merged_data) {
         
         umap_coords$outlier <- outliers
         
+        # Store outlier IDs
+        outlier_ids <- umap_coords$SampleID[outliers]
+        detected_outlier_ids(outlier_ids)
+        
         # Create plot with outliers highlighted
         p <- ggplot(umap_coords, aes(x = UMAP1, y = UMAP2, color = outlier)) +
           geom_point() +
@@ -69,7 +84,16 @@ outlier_detection_server <- function(input, output, session, merged_data) {
         
         # Render the plot within the Shiny app
         output$outlier_umap_plot <- renderPlot({
-          print(p)
+          p
+        })
+        
+        output$outlier_exclusion_status <- renderPrint({
+          if (length(outlier_ids) > 0) {
+            cat("Detected", length(outlier_ids), "outliers:\n")
+            cat(paste(outlier_ids, collapse = ", "), "\n")
+          } else {
+            cat("No outliers detected with current threshold.")
+          }
         })
         
         incProgress(1)
@@ -79,21 +103,33 @@ outlier_detection_server <- function(input, output, session, merged_data) {
     })
   })
   
-  # Add diagnostic output
-  output$data_diagnostics <- renderPrint({
-    req(merged_data())
-    cat("Data summary:\n")
-    print(summary(merged_data()))
-    cat("\nAssays with all NA values:\n")
-    print(merged_data() %>%
-      group_by(Assay) %>%
-      summarize(all_na = all(is.na(NPX))) %>%
-      filter(all_na) %>%
-      pull(Assay))
-    cat("\nSamples with QC warnings:\n")
-    print(merged_data() %>%
-      filter(QC_Warning == "Warning") %>%
-      distinct(SampleID) %>%
-      pull(SampleID))
+  observeEvent(input$exclude_outliers, {
+    req(merged_data(), detected_outlier_ids())
+    
+    outliers_to_remove <- detected_outlier_ids()
+    if (length(outliers_to_remove) == 0) {
+      showNotification("No outliers found to exclude.", type = "message")
+      return()
+    }
+    
+    withProgress(message = 'Excluding outliers...', value = 0, {
+      data <- merged_data()
+      # Normalize here too
+      if (!"SampleID" %in% colnames(data) && "Sample_ID" %in% colnames(data)) {
+         data <- data %>% rename(SampleID = Sample_ID)
+      }
+      
+      new_data <- data %>%
+        filter(!(SampleID %in% outliers_to_remove))
+      
+      merged_data(new_data)
+      showNotification(paste("Excluded", length(outliers_to_remove), "outlier samples."), type = "message")
+      
+      # Reset
+      detected_outlier_ids(NULL)
+      output$outlier_exclusion_status <- renderPrint(cat("Outliers excluded."))
+      
+      incProgress(1)
+    })
   })
 }

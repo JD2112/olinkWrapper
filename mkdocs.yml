@@ -69,7 +69,7 @@ nav:
 extra:
   version:
     provider: mike
-  current_year: !!python/object/apply:str ["2025"]
+  current_year: !!python/object/apply:str ["2026"]
 
 extra_css:
   - styles/extra.css
