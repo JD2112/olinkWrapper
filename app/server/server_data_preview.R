@@ -33,27 +33,78 @@ data_preview_server <- function(input, output, session, merged_data, var_key_mer
     
     data <- merged_data()
     if (!"QC_Warning" %in% colnames(data)) {
-      showNotification("QC_Warning column not found in dataset.", type = "EXCLUDED")
+      showNotification("QC_Warning column not found in dataset.", type = "error")
       return()
     }
     
-    warning_samples <- data %>% filter(QC_Warning == "EXCLUDED") %>% distinct(SampleID) %>% pull(SampleID)
+    # Count original data
+    original_samples <- length(unique(data$SampleID))
+    original_proteins <- length(unique(data$Assay))
+    original_rows <- nrow(data)
     
-    if (length(warning_samples) == 0) {
-      showNotification("No samples with QC warnings found.", type = "message")
+    # Identify rows with QC warnings (anything that's not "PASS")
+    # In Olink data, QC_Warning contains:
+    # - "PASS" for good measurements
+    # - Protein name (e.g., "BMP6") for measurements that failed QC
+    failed_qc_rows <- data %>% filter(QC_Warning != "PASS")
+    
+    if (nrow(failed_qc_rows) == 0) {
+      showNotification("No QC warnings found. All measurements have QC_Warning = 'PASS'.", type = "message")
       return()
     }
     
-    withProgress(message = 'Filter samples...', value = 0, {
-      new_data <- data %>% filter(QC_Warning != "EXCLUDED")
+    # Identify which proteins had QC failures
+    warning_proteins <- unique(failed_qc_rows$Assay)
+    
+    # Identify which samples had QC failures (for informational purposes)
+    warning_samples <- unique(failed_qc_rows$SampleID)
+    
+    # Count how many measurements failed per protein
+    protein_failure_counts <- failed_qc_rows %>%
+      group_by(Assay) %>%
+      summarize(n_failures = n()) %>%
+      arrange(desc(n_failures))
+    
+    withProgress(message = 'Filtering QC warnings...', value = 0, {
+      # Keep only rows where QC_Warning == "PASS"
+      # This removes protein-level QC failures
+      new_data <- data %>% filter(QC_Warning == "PASS")
+      
       merged_data(new_data)
       
+      # Count new data
+      new_samples <- length(unique(new_data$SampleID))
+      new_proteins <- length(unique(new_data$Assay))
+      new_rows <- nrow(new_data)
+      
       output$qc_filter_status <- renderPrint({
-        cat("Excluded", length(warning_samples), "samples with QC warnings:\n")
-        cat(paste(warning_samples, collapse = ", "))
+        cat("=== QC Warning Exclusion Summary ===\n\n")
+        
+        cat("Removed", original_rows - new_rows, "measurements that failed QC\n\n")
+        
+        cat("Proteins with QC failures:\n")
+        for (i in 1:nrow(protein_failure_counts)) {
+          cat("  -", protein_failure_counts$Assay[i], ":", 
+              protein_failure_counts$n_failures[i], "failed measurements\n")
+        }
+        cat("\n")
+        
+        cat("Samples affected:", length(warning_samples), "samples had at least one failed measurement\n\n")
+        
+        cat("Dataset Summary:\n")
+        cat("  Samples: ", original_samples, " → ", new_samples, 
+            " (", original_samples - new_samples, " removed)\n", sep = "")
+        cat("  Proteins: ", original_proteins, " → ", new_proteins, 
+            " (", original_proteins - new_proteins, " removed)\n", sep = "")
+        cat("  Total measurements: ", original_rows, " → ", new_rows, 
+            " (", original_rows - new_rows, " removed)\n", sep = "")
       })
       
-      showNotification(paste("Excluded", length(warning_samples), "samples with QC warnings."), type = "message")
+      showNotification(
+        paste("Removed", original_rows - new_rows, "measurements with QC warnings. Kept only 'PASS' measurements."), 
+        type = "message",
+        duration = 5
+      )
       incProgress(1)
     })
   })

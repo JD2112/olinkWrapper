@@ -3,3 +3,16 @@ site/
 notes.md
 questions.md
 Dockerfiles/
+ENHANCEMENT_SUMMARY.md
+IMPLEMENTATION_COMPLETE.md
+IMPLEMENTATION_PLAN.md
+QUICK_REFERENCE.md
+CHANGELOG.md
+data/
+app/www/keys.csv
+app/www/merged_data_2.csv
+app/www/npxTestData.csv
+app/www/npxTestManifest.csv
+app/www/test_merged_data.csv
+app/www/VarList_240620.csv
+app/www/WB-3586_NPX_2023-09-19.csv

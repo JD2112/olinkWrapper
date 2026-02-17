@@ -50,28 +50,24 @@ linear_regression_server <- function(input, output, session, merged_data) {
 
         incProgress(0.1, detail = "Preparing data")
 
-        # Exclude dependent var and covariates from predictors
-        excluded_cols <- c(input$dependent_var, unlist(
-          lapply(seq_len(input$num_covariates), function(i) input[[paste0("covariate", i)]])
-        ))
+        # Check if Assay column exists
+        if (!"Assay" %in% colnames(df)) {
+          showNotification("'Assay' column not found in dataset. Cannot run regression.", type = "error")
+          return(NULL)
+        }
 
-        # Identify numeric columns not excluded (potential predictors/biomarkers)
-        npx_vars <- colnames(df)[sapply(df, is.numeric) & !(colnames(df) %in% excluded_cols)]
-
-        incProgress(0.2, detail = "Processing NPX variables")
-
-        # Standardize NPX variables to Z-score if selected
-        if (input$npx_or_zscore == "Z-score") {
-          df <- df %>%
-            mutate(across(all_of(npx_vars), ~ scale(.), .names = "{.col}_z"))
-          npx_vars <- paste0(npx_vars, "_z")
+        # Get dependent variable
+        dep_var <- input$dependent_var
+        if (is.null(dep_var) || dep_var == "") {
+          showNotification("Please select a dependent variable.", type = "error")
+          return(NULL)
         }
 
         # Collect covariates selected by user
         covariates <- unlist(lapply(seq_len(input$num_covariates), function(i) input[[paste0("covariate", i)]]))
         covariates <- covariates[!is.na(covariates) & covariates != "" & covariates != "None"]
 
-        incProgress(0.3, detail = "Preprocessing covariates")
+        incProgress(0.2, detail = "Preprocessing covariates")
 
         # Preprocess covariate types (Character/Factor/Numeric)
         for (i in seq_along(covariates)) {
@@ -86,52 +82,91 @@ linear_regression_server <- function(input, output, session, merged_data) {
           }
         }
 
-        dep_var <- input$dependent_var
-        if (is.null(dep_var) || dep_var == "") {
-          showNotification("Please select a dependent variable.", type = "error")
-          return(NULL)
+        incProgress(0.3, detail = "Processing NPX values")
+
+        # Standardize NPX to Z-score if selected
+        if (input$npx_or_zscore == "Z-score") {
+          df <- df %>%
+            group_by(Assay) %>%
+            mutate(NPX_scaled = scale(NPX)[,1]) %>%
+            ungroup()
+          npx_var <- "NPX_scaled"
+        } else {
+          npx_var <- "NPX"
         }
 
+        # Get unique assays (proteins)
+        assays <- unique(df$Assay)
+        
         incProgress(0.5, detail = "Fitting models")
 
-        # Run linear regression models for each NPX variable
-        results <- purrr::map_dfr(npx_vars, function(var) {
+        # Run linear regression for each Assay (protein)
+        # Model: DependentVariable ~ NPX + Covariates
+        results <- purrr::map_dfr(assays, function(assay) {
+          # Filter data for this specific assay
+          assay_data <- df %>% filter(Assay == assay)
+          
+          # Build formula: DependentVariable ~ NPX + covariate1 + covariate2 + ...
           safe_dep_var <- paste0("`", dep_var, "`")
-          safe_var <- paste0("`", var, "`")
-          safe_covariates <- if(length(covariates) > 0) {
-            paste0("`", covariates, "`", collapse = " + ")
+          safe_npx <- paste0("`", npx_var, "`")
+          
+          if (length(covariates) > 0) {
+            safe_covariates <- paste0("`", covariates, "`", collapse = " + ")
+            formula_str <- paste(safe_dep_var, "~", safe_npx, "+", safe_covariates)
           } else {
-            NULL
+            formula_str <- paste(safe_dep_var, "~", safe_npx)
           }
-
-          formula_str <- if (!is.null(safe_covariates)) {
-            paste(safe_dep_var, "~", paste(c(safe_var, safe_covariates), collapse = " + "))
-          } else {
-            paste(safe_dep_var, "~", safe_var)
-          }
+          
           form <- as.formula(formula_str)
 
-          model <- tryCatch(lm(form, data = df), error = function(e) NULL)
+          model <- tryCatch(lm(form, data = assay_data), error = function(e) NULL)
           if (is.null(model)) return(NULL)
 
-          broom::tidy(model) %>%
-            filter(term == var) %>%
-            mutate(biomarker = gsub("_z$", "", var))
+          # Extract results - get the NPX coefficient
+          model_summary <- broom::tidy(model, conf.int = TRUE) %>%
+            filter(term == npx_var) %>%
+            mutate(Assay = assay)
+          
+          # Add Olink metadata if available
+          if ("OlinkID" %in% colnames(assay_data)) {
+            model_summary$OlinkID <- unique(assay_data$OlinkID)[1]
+          }
+          if ("UniProt" %in% colnames(assay_data)) {
+            model_summary$UniProt <- unique(assay_data$UniProt)[1]
+          }
+          if ("Panel" %in% colnames(assay_data)) {
+            model_summary$Panel <- unique(assay_data$Panel)[1]
+          }
+          
+          return(model_summary)
         })
 
         incProgress(0.9, detail = "Processing results")
 
         if (nrow(results) > 0) {
           results_clean <- results %>%
-            mutate(adj.p.value = p.adjust(p.value, method = "BH")) %>%
-            select(biomarker, estimate, std.error, p.value, adj.p.value) %>%
-            arrange(adj.p.value)
+            mutate(Adjusted_pval = p.adjust(p.value, method = "BH")) %>%
+            select(Assay, OlinkID, UniProt, Panel, estimate, conf.low, conf.high, 
+                   statistic, p.value, Adjusted_pval) %>%
+            arrange(p.value)
 
           regression_results_rv(results_clean)
 
           output$regression_results <- DT::renderDataTable({
-            DT::datatable(results_clean, options = list(pageLength = 15), rownames = FALSE)
+            DT::datatable(results_clean, 
+                         options = list(
+                           pageLength = 15,
+                           scrollX = TRUE
+                         ), 
+                         rownames = FALSE) %>%
+              DT::formatRound(c("estimate", "conf.low", "conf.high", "statistic", 
+                               "p.value", "Adjusted_pval"), 8)
           })
+          
+          showNotification(
+            paste("Regression completed for", length(assays), "proteins."), 
+            type = "message"
+          )
         } else {
           regression_results_rv(NULL)
           output$regression_results <- DT::renderDataTable({

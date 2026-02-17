@@ -7,7 +7,9 @@ volcano_plot_ui <- function() {
           card_header("Volcano Plot Settings"),
           card_body(
             radioButtons("volcano_plot_type", "Select Analysis Type", 
-                         choices = c("T-test" = "ttest", "ANOVA" = "anova")),
+                         choices = c("T-test" = "ttest", 
+                                   "ANOVA" = "anova",
+                                   "Mann-Whitney U Test" = "wilcox")),
             radioButtons("volcano_p_val_type", "P-value for significance line",
                          choices = c("Adjusted P-value (FDR)" = "Adjusted_pval", 
                                    "P-value (unadjusted)" = "p.value")),

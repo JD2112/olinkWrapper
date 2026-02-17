@@ -2,6 +2,9 @@
 
 heatmap_server <- function(input, output, session, merged_data) {
   
+  # Reactive value to store the current heatmap plot
+  current_heatmap <- reactiveVal(NULL)
+  
   # Update UI choices based on available data
   observe({
     req(merged_data())
@@ -36,6 +39,9 @@ heatmap_server <- function(input, output, session, merged_data) {
                                   y_lab = input$heatmap_y_axis)
         }
         
+        # Store the plot
+        current_heatmap(p)
+        
         # Adjust plot size based on the number of samples and proteins
         n_samples <- length(unique(data_subset$SampleID))
         n_proteins <- length(unique(data_subset$Assay))
@@ -55,11 +61,12 @@ heatmap_server <- function(input, output, session, merged_data) {
     })
   })
 
-  # Download handler for UMAP plot
-  output$download_umap <- downloadHandler(
+  # Download handler for heatmap plot
+  output$download_heatmap <- downloadHandler(
     filename = function() { paste("Heatmap_plot_", Sys.Date(), ".png", sep="") },
     content = function(file) {
-      ggsave(file, plot = last_plot(), device = "png", width = 10, height = 8)
+      req(current_heatmap())
+      ggsave(file, plot = current_heatmap(), device = "png", width = 12, height = 10, dpi = 300)
     }
   )
 

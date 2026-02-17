@@ -16,7 +16,10 @@ data_preview_ui <- function() {
               div(
                 actionButton("filter_qc_warnings", "Exclude samples with QC Warning", class = "btn-danger w-100"),
                 br(), br(),
-                verbatimTextOutput("qc_filter_status")
+                tags$div(
+                  style = "height: 300px; overflow-y: auto; border: 1px solid #ccc;",
+                  verbatimTextOutput("qc_filter_status")
+                )
               )
             )
           )

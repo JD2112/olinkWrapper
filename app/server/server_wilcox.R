@@ -1,4 +1,4 @@
-wilcox_server <- function(input, output, session, merged_data) {
+wilcox_server <- function(input, output, session, merged_data, wilcox_results_rv = NULL) {
   
   # Store the results in a reactive value
   wilcox_results <- reactiveVal(NULL)
@@ -27,8 +27,13 @@ wilcox_server <- function(input, output, session, merged_data) {
                                 variable = input$mw_variable,
                                 alternative = input$alternative)
         
-        # Store the results
+        # Store the results locally
         wilcox_results(results)
+        
+        # Also store in the shared reactive value if provided
+        if (!is.null(wilcox_results_rv)) {
+          wilcox_results_rv(results)
+        }
         
         output$wilcox_output <- renderDT({
           datatable(results, 
@@ -50,6 +55,8 @@ wilcox_server <- function(input, output, session, merged_data) {
                                 )
         })
 
+        showNotification("Mann-Whitney U Test completed. Results can now be used for volcano plots.", 
+                        type = "message", duration = 5)
         incProgress(1)
 
       }, error = function(e) {

@@ -3,6 +3,9 @@ library(ggrepel)
 volcano_plot_server <- function(input, output, session, merged_data, ttest_results, anova_results) {
   # Reactive value to store the current plot
   current_plot <- reactiveVal(NULL)
+  
+  # Reactive value to store wilcox results
+  wilcox_results <- reactiveVal(NULL)
 
   observeEvent(input$run_volcano, {
     withProgress(message = "Generating Volcano plot...", value = 0, {
@@ -11,9 +14,15 @@ volcano_plot_server <- function(input, output, session, merged_data, ttest_resul
         if (input$volcano_plot_type == "ttest") {
           req(ttest_results())
           results <- ttest_results()
-        } else {
+        } else if (input$volcano_plot_type == "anova") {
           req(anova_results())
           results <- anova_results()$results
+        } else if (input$volcano_plot_type == "wilcox") {
+          req(wilcox_results())
+          results <- wilcox_results()
+        } else {
+          showNotification("Invalid plot type selected.", type = "error")
+          return()
         }
         
         # 2. Extract user choices
@@ -25,8 +34,15 @@ volcano_plot_server <- function(input, output, session, merged_data, ttest_resul
         plot_df <- results
         
         # Ensure we have an 'estimate' column
+        # For Wilcoxon tests, we might need to use a different column
         if (!"estimate" %in% colnames(plot_df)) {
-           plot_df$estimate <- if ("statistic" %in% colnames(plot_df)) plot_df$statistic else 0
+           if ("statistic" %in% colnames(plot_df)) {
+             plot_df$estimate <- plot_df$statistic
+           } else if ("estimate_median_diff" %in% colnames(plot_df)) {
+             plot_df$estimate <- plot_df$estimate_median_diff
+           } else {
+             plot_df$estimate <- 0
+           }
         }
         
         # Explicitly pull the selected P-value into a dedicated column for plotting
@@ -38,11 +54,24 @@ volcano_plot_server <- function(input, output, session, merged_data, ttest_resul
         # Define Significance based on the user-selected p-value column and threshold
         plot_df$Significance_Status <- ifelse(plot_df$Selected_P < p_threshold, "Significant", "Non-significant")
         
+        # Determine direction for significant proteins
+        plot_df$Direction <- ifelse(
+          plot_df$Significance_Status == "Significant",
+          ifelse(plot_df$estimate > 0, "Upregulated", "Downregulated"),
+          "Non-significant"
+        )
+        
         # 4. Generate the Volcano Plot manually for maximum control
         # olink_volcano_plot has limitations with custom p-values, so we'll build it with ggplot
-        p <- ggplot(plot_df, aes(x = estimate, y = -log10(Selected_P), color = Significance_Status)) +
+        p <- ggplot(plot_df, aes(x = estimate, y = -log10(Selected_P), color = Direction)) +
           geom_point(alpha = 0.7, size = 2) +
-          scale_color_manual(values = c("Significant" = "#E41A1C", "Non-significant" = "#999999")) +
+          scale_color_manual(
+            values = c(
+              "Upregulated" = "#E41A1C",
+              "Downregulated" = "#377EB8",
+              "Non-significant" = "#999999"
+            )
+          ) +
           geom_hline(yintercept = -log10(p_threshold), linetype = "dashed", color = "black") +
           theme_minimal() +
           theme(
@@ -95,4 +124,9 @@ volcano_plot_server <- function(input, output, session, merged_data, ttest_resul
       ggsave(file, plot = current_plot(), device = "png", width = 10, height = 8, dpi = 300)
     }
   )
+  
+  # Return a list containing the wilcox_results setter
+  return(list(
+    set_wilcox_results = wilcox_results
+  ))
 }

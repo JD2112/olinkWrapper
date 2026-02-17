@@ -30,6 +30,7 @@ source("ui/ui_distribution_plot.R")
 source("ui/ui_lme_plot.R")
 source("ui/ui_pathway_heatmap.R")
 source("ui/ui_qc_plot.R")
+source("ui/ui_manual_exclusion.R")
 #source("ui/ui_plate_randomization.R")
 source("ui/ui_linear_regression.R")
 
@@ -110,7 +111,8 @@ single_ui <- function() {
           nav_panel("1. Bridge Selector", bridge_sample_ui()),
           nav_panel("2. Normalization", normalization_ui()),
           nav_panel("3. LOD", lod_integration_ui()),
-          nav_panel("4. Outlier Detection", outlier_detection_ui())
+          nav_panel("4. Outlier Detection", outlier_detection_ui()),
+          nav_panel("5. Manual Exclusion", manual_exclusion_ui())
         )
       ),
       nav_panel("C. Statistical Analysis",
