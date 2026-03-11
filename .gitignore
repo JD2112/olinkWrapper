@@ -17,4 +17,4 @@ app/www/test_merged_data.csv
 app/www/VarList_240620.csv
 app/www/WB-3586_NPX_2023-09-19.csv
 Dockerfile.old
-assets/
+local/

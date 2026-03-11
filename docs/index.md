@@ -16,7 +16,7 @@ hide:
 
 <div class="main-content" markdown="1">
 
-**olinkWrapper** provides a user-friendly interface for performing quick analysis of Olink data using the [OlinkAnalyze package](https://github.com/Olink-Proteomics/OlinkRPackage). It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs in comprehensive PDF/HTML reports.
+**olinkWrapper** provides a user-friendly interface for performing quick analysis of Olink data using the [OlinkAnalyze package](https://github.com/Olink-Proteomics/OlinkRPackage). It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs in comprehensive PDF report.
 
 ## olinkWrapper Features
 

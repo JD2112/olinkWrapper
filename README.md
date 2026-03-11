@@ -6,7 +6,7 @@
 [![wakatime](https://wakatime.com/badge/user/fe95275f-909a-4147-a45d-624981173898/project/9c46d7c4-ca59-4065-ade6-f882d7350a5d.svg)](https://wakatime.com/badge/user/fe95275f-909a-4147-a45d-624981173898/project/9c46d7c4-ca59-4065-ade6-f882d7350a5d)
 
 
-**olinkWrapper** provides a user-friendly interface for performing quick analysis of Olink data using the [OlinkAnalyze package](https://github.com/Olink-Proteomics/OlinkRPackage). It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs in comprehensive PDF/HTML reports.
+**olinkWrapper** provides a user-friendly interface for performing quick analysis of Olink data using the [OlinkAnalyze package](https://github.com/Olink-Proteomics/OlinkRPackage). It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs in comprehensive PDF report.
 
 ## Features
 
@@ -27,11 +27,14 @@
 
 To run an analysis, you will need:
 
-- **NPX Data (CSV)**  *(required)*: Must contain `SampleID`, `Assay`, and `NPX` columns
+- **NPX Data (CSV)**  *(required)*: Must contain `SampleID`, `Assay`, and `NPX` columns. 
+
+> *Note:* olinkWrapper v1.3.0 can handle 2 NPX files.
+
 - **Variables File (CSV)** *(required)*: Must contain `SUBJID` and any covariates to be modeled
 - **Key File (CSV)** *(Optional)*: If your NPX `SampleID` needs to be cross-referenced to `SUBJID`
 
-*Note: Ensure your column headers do not contain spaces, trailing whitespace, or special characters (e.g., Ö, Ä, Å, `;`).*
+> *Note: Ensure your column headers do not contain spaces, trailing whitespace, or special characters (e.g., Ö, Ä, Å, `;`).*
 
 #### Example NPX data
 
