@@ -1,27 +1,72 @@
 FROM jd21/shinyolink:latest
 
 LABEL authors="Jyotirmoy Das" \
-    version="1.5" \
-    description="Updated Docker image for OlinkWrappeR v1.5 with LOD, UMAP, and enhanced Volcano Plot integrations"
+    version="1.3.0" \
+    description="Production Docker image for OlinkWrappeR v1.3.0 with stable system TeX Live for PDF reporting"
+
+# ------------------------------------------------------------------
+# SYSTEM DEPENDENCIES (LaTeX + fonts + utilities)
+# ------------------------------------------------------------------
 
 USER root
 
-# Install missing R packages
-RUN R -e "install.packages(c('umap', 'pheatmap'), repos='https://cran.rstudio.com/')"
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    wget \
+    perl \
+    libfontconfig1 \
+    fontconfig \
+    texlive-xetex \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-fonts-extra \
+    texlive-pictures \
+    texlive-plain-generic \
+    lmodern \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Clean existing app directory to ensure only new files are used
+# ------------------------------------------------------------------
+# R PACKAGES (analysis + reporting)
+# ------------------------------------------------------------------
+
+RUN R -e "install.packages(c( \
+    'umap', \
+    'pheatmap', \
+    'kableExtra', \
+    'writexl', \
+    'cowplot', \
+    'ggrepel', \
+    'broom', \
+    'purrr', \
+    'foreach', \
+    'doParallel' \
+    ), repos='https://cran.rstudio.com/', Ncpus=parallel::detectCores())"
+
+# ------------------------------------------------------------------
+# SHINY APP DEPLOYMENT
+# ------------------------------------------------------------------
+
+# Remove previous app version
 RUN rm -rf /srv/shiny-server/*
 
-# Copy updated app files from local app/ directory
+# Copy updated source
 COPY app/ /srv/shiny-server/
 
-# Ensure correct permissions
-RUN chown -R shiny:shiny /srv/shiny-server && \
-    chmod -R 755 /srv/shiny-server
+# Copy VERSION file one level above app root so version.R can find it via ../VERSION
+COPY VERSION /srv/VERSION
 
-# Expose port 3838
+# Fix ownership and permissions
+RUN chown -R shiny:shiny /srv/shiny-server /srv/VERSION && \
+    chmod -R 755 /srv/shiny-server && \
+    chmod 644 /srv/VERSION
+
+# ------------------------------------------------------------------
+# RUNTIME CONFIG
+# ------------------------------------------------------------------
+
 EXPOSE 3838
 
-# Run the Shiny app
 USER shiny
+
 CMD ["/usr/bin/shiny-server"]

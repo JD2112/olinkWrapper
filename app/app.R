@@ -16,6 +16,8 @@ library(ggrepel)
 library(patchwork)
 
 
+# Load version first — sets global APP_VERSION used by all modules
+source("version.R")
 
 # Source utility functions
 source("utilities.R")
@@ -35,7 +37,11 @@ source("ui/ui_data_preview.R")
 # Define the main UI
 ui <- fluidPage(
   useShinyjs(),
-  theme = bs_theme(version = 5, bootswatch = "flatly"),
+  # Custom CSS and Header links
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "style.css") # ,
+    # tags$title("olinkWrappeR")
+  ),
   uiOutput("page_content"),
   uiOutput("background_style")
 )
@@ -47,10 +53,11 @@ server <- function(input, output, session) {
   merged_data <- reactiveVal(NULL)
   var_key_merged <- reactiveVal(NULL)
   ttest_results <- reactiveVal(NULL)
-  
+  npx_data_2 <- reactiveVal(NULL) # Second NPX dataset for normalization/bridging
+
   # Reactive value to store the current page
   current_page <- reactiveVal("start")
-  
+
   # Render the appropriate page
   output$page_content <- renderUI({
     print(paste("Rendering page:", current_page()))
@@ -61,7 +68,8 @@ server <- function(input, output, session) {
       single_ui()
     }
   })
-  
+
+  # Navigation and page rendering is handled by output$page_content Above
   # Render the background style
   output$background_style <- renderUI({
     if (current_page() == "start") {
@@ -108,7 +116,6 @@ server <- function(input, output, session) {
       "))
     }
   })
-  
   # Start page server logic
   observeEvent(input$start_analysis, {
     print("Start analysis button clicked")
@@ -119,61 +126,64 @@ server <- function(input, output, session) {
       showNotification("Multi-panel analysis is not yet implemented.", type = "warning")
     }
   })
-  
+
   # Main analysis server logic
   observeEvent(current_page(), {
     print(paste("Current page changed to:", current_page()))
     if (current_page() == "main") {
       print("Calling server_main function")
-      server_main(input, output, session, merged_data, var_key_merged, ttest_results)
+      server_main(input, output, session, merged_data, var_key_merged, ttest_results, npx_data_2)
     }
   })
-  
+
   # Add the new merge functionality
   observeEvent(input$merge_var_key, {
-  req(input$var_file, input$key_file)
-  
-  tryCatch({
-    var_data <- safe_read_csv(input$var_file$datapath)
-    key_data <- safe_read_csv(input$key_file$datapath)
-    
-    print("Var data dimensions:")
-    print(dim(var_data))
-    print("Key data dimensions:")
-    print(dim(key_data))
-    
-    var_data <- var_data %>% distinct(SUBJID, .keep_all = TRUE)
-    key_data <- key_data %>% distinct(SampleID, .keep_all = TRUE)
-    
-    if("SUBJID" %in% colnames(var_data)) {
-      var_data$SUBJID <- gsub("\n", "", var_data$SUBJID)
-    }
-    
-    print("Columns in var_data:")
-    print(colnames(var_data))
-    print("Columns in key_data:")
-    print(colnames(key_data))
-    
-    if (!"SUBJID" %in% colnames(var_data) || !"SampleID" %in% colnames(key_data)) {
-      stop("Required columns 'SUBJID' or 'SampleID' are missing")
-    }
-    
-    merged <- var_data %>% left_join(key_data, by = c("SUBJID" = "SampleID"))
-    var_key_merged(merged)
-    
-    print("Merged data dimensions:")
-    print(dim(merged))
-    
-    show_success("Var and Key data merged successfully")
-  }, error = function(e) {
-    handle_error(paste("Error merging data:", e$message))
+    req(input$var_file, input$key_file)
+
+    tryCatch(
+      {
+        var_data <- safe_read_csv(input$var_file$datapath)
+        key_data <- safe_read_csv(input$key_file$datapath)
+
+        print("Var data dimensions:")
+        print(dim(var_data))
+        print("Key data dimensions:")
+        print(dim(key_data))
+
+        var_data <- var_data %>% distinct(SUBJID, .keep_all = TRUE)
+        key_data <- key_data %>% distinct(SampleID, .keep_all = TRUE)
+
+        if ("SUBJID" %in% colnames(var_data)) {
+          var_data$SUBJID <- gsub("\n", "", var_data$SUBJID)
+        }
+
+        print("Columns in var_data:")
+        print(colnames(var_data))
+        print("Columns in key_data:")
+        print(colnames(key_data))
+
+        if (!"SUBJID" %in% colnames(var_data) || !"SampleID" %in% colnames(key_data)) {
+          stop("Required columns 'SUBJID' or 'SampleID' are missing")
+        }
+
+        merged <- var_data %>% left_join(key_data, by = c("SUBJID" = "SampleID"))
+        var_key_merged(merged)
+
+        print("Merged data dimensions:")
+        print(dim(merged))
+
+        show_success("Var and Key data merged successfully")
+      },
+      error = function(e) {
+        handle_error(paste("Error merging data:", e$message))
+      }
+    )
   })
-})
-  
+
   # Add the new download handler
   output$download_var_key_data <- downloadHandler(
     filename = function() {
-      paste("var_key_merged_", Sys.Date(), ".csv", sep="")
+      paste("var_key_merged_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       req(var_key_merged())

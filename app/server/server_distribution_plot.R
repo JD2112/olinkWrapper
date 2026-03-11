@@ -1,5 +1,8 @@
-distribution_plot_server <- function(input, output, session, merged_data) {
+distribution_plot_server <- function(input, output, session, merged_data, analysis_log) {
   
+  # App Version
+  VERSION <- APP_VERSION  # Set globally by version.R
+
   # Update input choices
   observe({
     req(merged_data())
@@ -10,48 +13,42 @@ distribution_plot_server <- function(input, output, session, merged_data) {
   plot_data <- eventReactive(input$generate_dist_plot, {
     req(merged_data(), input$dist_color_variable)
     
-    # Print debug information
-    print(paste("Selected color variable:", input$dist_color_variable))
-    print(paste("Is color variable in merged_data:", input$dist_color_variable %in% names(merged_data())))
-    
-    # Generate plot using olink_dist_plot
-    tryCatch({
-      print("Generating distribution plot...")
-      print(paste("Color variable:", input$dist_color_variable))
-      
-      # Convert the color variable to a symbol
-      color_var <- rlang::sym(input$dist_color_variable)
-      
-      plot <- olink_dist_plot(merged_data(), color_g = !!color_var)
-      print("Plot generated successfully")
-      print(class(plot))
-      plot
-    }, error = function(e) {
-      print(paste("Error in olink_dist_plot:", e$message))
-      print("Merged data column names:")
-      print(names(merged_data()))
-      NULL
+    withProgress(message = 'Generating distribution plot...', value = 0, {
+      # Generate plot using olink_dist_plot
+      tryCatch({
+        data_for_plot <- merged_data()
+        if (input$dist_var_type == "Factor") {
+          data_for_plot[[input$dist_color_variable]] <- as.factor(data_for_plot[[input$dist_color_variable]])
+        } else {
+          data_for_plot[[input$dist_color_variable]] <- as.character(data_for_plot[[input$dist_color_variable]])
+        }
+        
+        plot <- do.call(olink_dist_plot, list(df = data_for_plot, color_g = input$dist_color_variable))
+        
+        # Log analysis
+        log_analysis(analysis_log, "Distribution Plot", 
+                     paste("Color by:", input$dist_color_variable, "| Type:", input$dist_var_type),
+                     plot = plot)
+        
+        incProgress(1)
+        plot
+      }, error = function(e) {
+        showNotification(paste("Error generating distribution plot:", e$message), type = "error")
+        NULL
+      })
     })
   })
   
   # Render distribution plot
   output$distribution_plot <- renderPlot({
     req(plot_data())
-    print("Rendering plot...")
-    if (is.null(plot_data())) {
-      plot(0, 0, type = "n", axes = FALSE, xlab = "", ylab = "")
-      text(0, 0, "Error generating distribution plot. Please check your data and selections.", cex = 1.2)
-      text(0, -0.1, "Check the console for more details.", cex = 0.8)
-    } else {
-      print(class(plot_data()))
-      print(plot_data())
-    }
+    plot_data()
   })
   
   # Download handler
   output$download_dist_plot <- downloadHandler(
     filename = function() {
-      paste("distribution_plot_", Sys.Date(), ".png", sep = "")
+      paste0("olinkWrapper_", VERSION, "_DistributionPlot_", input$dist_color_variable, "_", format(Sys.Date(), "%Y%m%d"), ".png")
     },
     content = function(file) {
       req(plot_data())

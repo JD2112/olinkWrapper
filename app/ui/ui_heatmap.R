@@ -1,33 +1,38 @@
-# heatmap plot ui
-
 heatmap_ui <- function() {
   tagList(
-    fluidRow(
-      column(
-        width = 12,
-        card(
-          card_header("Heatmap Plot"),
-          card_body("Heatmap",
-                fluidRow(
-                  column(4,
-                    selectInput("heatmap_type", "Heatmap Type:",
-                                choices = c("All Samples and Proteins", "Module-Trait Relationship")),
-                    textInput("heatmap_title", "Heatmap Title:", 
-                              value = "Heatmap of Samples and Proteins"),
-                  ),
-                  column(4,
-                    textInput("heatmap_y_axis", "Y-axis Label:", value = "Samples"),
-                    textInput("heatmap_x_axis", "X-axis Label:", value = "Proteins")
-                  ),
-                  column(4,
-                    br(),
-                    actionButton("generate_heatmap", "Generate Heatmap", 
-                                 class = "btn-primary btn-block")
-                  )
-                ),
-                br(),
-                plotOutput("heatmap_plot"),
-                downloadButton("download_heatmap", "Download Heatmap Plot")
+    card(
+      class = "shadow-sm border-0 mb-4",
+      card_header(
+        class = "bg-primary text-white",
+        tagList(icon("th"), " Hierarchy & Clustering Heatmap")
+      ),
+      card_body(
+        layout_sidebar(
+          sidebar = sidebar(
+            title = "Visualization Controls",
+            width = 300,
+            selectInput("heatmap_type", "Heatmap Logic:",
+                        choices = c("All Samples and Proteins" = "All Samples and Proteins", 
+                                  "Module-Trait Relationship" = "Module-Trait Relationship")),
+            
+            hr(),
+            div(
+              class = "bg-light p-3 rounded-3 mb-3",
+              textInput("heatmap_title", "Plot Title:", 
+                        value = "Heatmap of Samples and Proteins"),
+              textInput("heatmap_y_axis", "Y-axis Label:", value = "Samples"),
+              textInput("heatmap_x_axis", "X-axis Label:", value = "Proteins")
+            ),
+            
+            actionButton("generate_heatmap", " Render Heatmap", 
+                         class = "btn-primary w-100 py-2", icon = icon("sync")),
+            br(),
+            downloadButton("download_heatmap", " Download heatmap", class = "btn-outline-success w-100 mt-2")
+          ),
+          # Main Plot Area
+          div(
+            class = "p-2 bg-white rounded-3 border",
+            plotOutput("heatmap_plot", height = "750px")
           )
         )
       )

@@ -1,5 +1,8 @@
-wilcox_server <- function(input, output, session, merged_data, wilcox_results_rv = NULL) {
+wilcox_server <- function(input, output, session, merged_data, wilcox_results_rv = NULL, analysis_log) {
   
+  # App Version
+  VERSION <- APP_VERSION  # Set globally by version.R
+
   # Store the results in a reactive value
   wilcox_results <- reactiveVal(NULL)
   
@@ -27,7 +30,6 @@ wilcox_server <- function(input, output, session, merged_data, wilcox_results_rv
                                 variable = input$mw_variable,
                                 alternative = input$alternative)
         
-        # Store the results locally
         wilcox_results(results)
         
         # Also store in the shared reactive value if provided
@@ -35,28 +37,32 @@ wilcox_server <- function(input, output, session, merged_data, wilcox_results_rv
           wilcox_results_rv(results)
         }
         
+        # Log analysis
+        log_analysis(analysis_log, "Wilcoxon Rank Sum", 
+                     paste("Variable:", input$mw_variable, "| Alternative:", input$alternative),
+                     table = results)
+        
         output$wilcox_output <- renderDT({
           datatable(results, 
+            extensions = 'Buttons',
             options = list(
-                        paging = TRUE,
-                        searching = TRUE,
-                        fixedColumns = TRUE,
-                        autowidth = TRUE,
-                        ordering = TRUE,
-                        dom = 'Bflrtip',
-                        lengthMenu = list(c(10, 25, 50, 100, -1), c('10', '25', '50', '100','All')),
-                        scrollX = TRUE,
-                        buttons = list(
-                        list(extend = "excel", text = "Download current page", 
-                                filename = "Wilcox test Analysis",
-                                exportOptions = list(
-                                  modifier = list(page = "current")
-                                ))))
-                                )
+              paging = TRUE,
+              searching = TRUE,
+              fixedColumns = TRUE,
+              autowidth = TRUE,
+              ordering = TRUE,
+              dom = 'Bflrtip',
+              lengthMenu = list(c(10, 25, 50, 100, -1), c('10', '25', '50', '100','All')),
+              scrollX = TRUE,
+              buttons = list(
+                list(extend = "excel", text = "Download current page", 
+                     filename = paste0("olinkWrapper_", VERSION, "_Wilcox_", input$mw_variable, "_", format(Sys.Date(), "%Y%m%d")),
+                     exportOptions = list(modifier = list(page = "current")))
+              )
+            ))
         })
 
-        showNotification("Mann-Whitney U Test completed. Results can now be used for volcano plots.", 
-                        type = "message", duration = 5)
+        showNotification("Mann-Whitney U Test completed.", type = "message")
         incProgress(1)
 
       }, error = function(e) {
@@ -68,7 +74,7 @@ wilcox_server <- function(input, output, session, merged_data, wilcox_results_rv
   # Download handler for full results
   output$download_wilcox <- downloadHandler(
     filename = function() {
-      paste("wilcox_test_results_", Sys.Date(), ".csv", sep = "")
+      paste0("olinkWrapper_", VERSION, "_Wilcox_results_", input$mw_variable, "_", format(Sys.Date(), "%Y%m%d"), ".csv")
     },
     content = function(file) {
       req(wilcox_results())

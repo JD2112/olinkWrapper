@@ -1,0 +1,226 @@
+---
+title: ""
+date: ""
+output:
+  pdf_document:
+    latex_engine: pdflatex
+    number_sections: true
+    toc: false # We will place it manually
+header-includes:
+  - \usepackage{fancyhdr}
+  - \usepackage{xcolor}
+  - \usepackage{titlesec}
+  - \usepackage{wallpaper}
+  - \usepackage{graphicx}
+  - \usepackage{tikz}
+  - \usepackage{geometry}
+  - \usepackage{hyperref}
+  - \usepackage{fontawesome5}
+  - \definecolor{headerblue}{RGB}{0, 51, 102}
+  - \definecolor{subblue}{RGB}{51, 102, 153}
+  - \definecolor{sidebarcolor}{RGB}{240, 244, 248}
+  - \pagestyle{fancy}
+  - \fancyhf{}
+  - \renewcommand{\headrulewidth}{0.4pt}
+  - \titleformat{\section}{\color{headerblue}\normalfont\Large\bfseries}{\thesection}{1em}{}
+  - \titleformat{\subsection}{\color{subblue}\normalfont\large\bfseries}{\thesubsection}{1em}{}
+params:
+  exclusion_log: NULL
+  version: "1.3.0"
+  img_path: "/srv/shiny-server/www/ppin.png"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+log <- params$exclusion_log
+```
+
+\begin{titlepage}
+    \newgeometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+    \begin{tikzpicture}[remember picture,overlay]
+        % Top decorative bar
+        \fill[headerblue] (current page.north west) rectangle ([yshift=-1cm]current page.north east);
+        
+        % Main Title
+        \node[anchor=north west, text=headerblue] at ([xshift=2cm, yshift=-3cm]current page.north west) {
+            \parbox{17cm}{
+                {\fontsize{34}{40} \selectfont \bfseries olinkWrapper} \\
+                \vspace{0.3cm}
+                {\large \textcolor{headerblue!50}{\rule{17cm}{2pt}}} \\
+                \vspace{0.3cm}
+                {\Large \bfseries \color{subblue} Preprocessing Exclusion Report}
+            }
+        };
+
+        % Center Figure (ppin.png)
+        \node[anchor=center] at (current page.center) {
+            \includegraphics[width=17cm]{`r params$img_path`}
+        };
+
+        % Bottom Metadata Block
+        \node[anchor=south west] at ([xshift=2cm, yshift=5cm]current page.south west) {
+            \parbox{17cm}{
+                \begin{minipage}[t]{0.33\textwidth}
+                    \textbf{\textcolor{headerblue}{Report Date}} \\
+                    `r format(Sys.Date(), "%B %d, %Y")`
+                \end{minipage}
+                \begin{minipage}[t]{0.33\textwidth}
+                    \textbf{\textcolor{headerblue}{Software Version}} \\
+                    OlinkWrapper v`r params$version`
+                \end{minipage}
+                \begin{minipage}[t]{0.33\textwidth}
+                    \textbf{\textcolor{headerblue}{App Developer}} \\
+                    Jyotirmoy Das
+                \end{minipage}
+            }            
+        };
+
+        % Disclaimer
+        \node[anchor=south west] at ([xshift=2cm, yshift=3.5cm]current page.south west) {
+            \parbox{17cm}{
+                \textbf{Disclaimer:} Please remember \textbf{olinkWrapper} is based on the \textcolor{headerblue}{\textbf{\href{https://github.com/Olink-Proteomics/OlinkRPackage}{OlinkAnalyze}}} package from the Olink Developers. Please cite/use the original package.
+            }
+        };
+        
+
+        % Bottom Citation
+        \node[anchor=south west] at ([xshift=2cm, yshift=2.5cm]current page.south west) {
+          \parbox{17cm}{
+            \begin{minipage}[t]{0.5\textwidth}
+              \textcolor{headerblue}{\faGlobe} {\href{https://olink-wrapper.serve.scilifelab.se/}{olink-wrapper.serve.scilifelab.se}}
+            \end{minipage}
+             \begin{minipage}[t]{0.5\textwidth}
+              \textcolor{headerblue}{\faGithub} {\href{https://github.com/JD2112/olinkWrapper}{github.com/JD2112/olinkWrapper}}
+            \end{minipage}
+          }
+        };
+
+        \node[anchor=south west] at ([xshift=2cm, yshift=1.5cm]current page.south west) {
+          \parbox{17cm}{            
+              \small \textcolor{black}{Citation: \href{https://doi.org/10.5281/zenodo.15098644}{Zenodo: 15098644}}
+          }
+        };
+
+        % Bottom decorative bar
+        \fill[headerblue] (current page.south west) rectangle ([yshift=1cm]current page.south east);
+    \end{tikzpicture}
+\end{titlepage}
+
+\restoregeometry
+\newpage
+\ClearWallPaper
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[C]{
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[headerblue] (current page.north west) rectangle ([yshift=-1.2cm]current page.north east);
+    \node[anchor=north east, text=white] at ([xshift=-1cm, yshift=-0.4cm]current page.north east) {OlinkWrapper v`r params$version` };
+  \end{tikzpicture}
+}
+
+\fancyfoot[C]{
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[headerblue] (current page.south west) rectangle ([yshift=1.2cm]current page.south east);
+    \node[anchor=south west, text=white] at ([xshift=1cm, yshift=0.4cm]current page.south west) {\small \thepage};
+    \node[anchor=south east, text=white] at ([xshift=-1cm, yshift=0.4cm]current page.south east) {\small Citation: \href{https://doi.org/10.5281/zenodo.15098644}{Zenodo: 15098644}};
+  \end{tikzpicture}
+}
+
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\vspace*{1cm}
+
+\tableofcontents
+\newpage
+
+# Introduction
+
+This report summarises all exclusion steps performed during the preprocessing of Olink NPX data.
+
+---
+
+```{r overall-summary}
+if (is.null(log) || length(log) == 0) {
+  cat("No exclusion steps were recorded in this session.")
+  knitr::knit_exit()
+}
+```
+
+```{r steps-loop, results='asis'}
+# Definition of step descriptions for better clarity
+step_rationales <- list(
+  "A. Data Preview – Exclude samples with QC Warning" = "Measurements flagged by Olink's NPX Manager or NPX Explore with a QC Warning (anything other than 'PASS') are removed at the protein level to prevent unreliable data points from biasing the analysis.",
+  "B. Preprocessing > 3. LOD Detection – Filter proteins >50% below LOD" = "Assays where a significant portion of samples (typically >50%) fall below the Limit of Detection (LOD) are excluded. High proportions of missing or below-LOD data can reduce statistical power and lead to false discoveries.",
+  "B. Preprocessing > 4. Outlier Detection – Exclude outlier samples" = "Samples identified as multivariate outliers (using UMAP and distance-based heuristics) are excluded. These samples may represent technical failures or biological extremes that do not represent the common sample distribution.",
+  "B. Preprocessing > 5. Manual Exclusion" = "User-defined exclusion of specific samples (e.g., control samples) or proteins based on study protocol or prior quality assessment."
+)
+
+for (i in seq_along(log)) {
+  entry <- log[[i]]
+  rationale <- step_rationales[[entry$step]]
+  
+  # Main Section for each step
+  cat("# Step ", i, ": ", entry$step, "\n\n", sep="")
+  cat("**Performed on:** ", entry$timestamp, "\n\n")
+
+  if (!is.null(rationale)) {
+    cat("## Background\n\n")
+    cat(rationale, "\n\n")
+  }
+
+  if (!is.null(entry$description) && nchar(entry$description) > 0) {
+    cat("## Execution Details\n\n")
+    cat(entry$description, "\n\n")
+  }
+
+  # Samples section
+  if (!is.null(entry$samples_excluded) && length(entry$samples_excluded) > 0) {
+    cat("## Samples Excluded (", length(entry$samples_excluded), ")\n\n", sep = "")
+    cat(paste(entry$samples_excluded, collapse = ", "), "\n\n")
+  }
+
+  # Proteins / assays section
+  if (!is.null(entry$proteins_excluded) && length(entry$proteins_excluded) > 0) {
+    cat("## Proteins Excluded (", length(entry$proteins_excluded), ")\n\n", sep = "")
+    cat(paste(entry$proteins_excluded, collapse = ", "), "\n\n")
+  }
+
+  # Dataset before/after
+  if (!is.null(entry$before) && !is.null(entry$after)) {
+    cat("## Pre/Post Filtering Summary\n\n")
+    cat("| Metric | Before | After | Removed |\n")
+    cat("|--------|--------|-------|---------|\n")
+    if (!is.null(entry$before$samples)) {
+      cat("| Samples |", entry$before$samples, "|",
+          entry$after$samples, "|",
+          entry$before$samples - entry$after$samples, "|\n")
+    }
+    if (!is.null(entry$before$proteins)) {
+      cat("| Proteins |", entry$before$proteins, "|",
+          entry$after$proteins, "|",
+          entry$before$proteins - entry$after$proteins, "|\n")
+    }
+    if (!is.null(entry$before$rows)) {
+      cat("| Measurements |", entry$before$rows, "|",
+          entry$after$rows, "|",
+          entry$before$rows - entry$after$rows, "|\n")
+    }
+    cat("\n")
+  }
+
+  # Extra notes
+  if (!is.null(entry$notes) && nchar(entry$notes) > 0) {
+    cat("## Additional Notes\n\n")
+    cat(entry$notes, "\n\n")
+  }
+
+  # cat("\\newpage\n\n")
+}
+```
+
+---
+
+\vspace{20cm}
+\textbf{\textcolor{blue}{Report generated by olinkWrappeR on `r Sys.time()`}}
+

@@ -1,4 +1,11 @@
-violin_plot_server <- function(input, output, session, merged_data) {
+violin_plot_server <- function(input, output, session, merged_data, analysis_log) {
+  
+  # App Version
+  VERSION <- APP_VERSION  # Set globally by version.R
+
+  # Reactive value to store the current plot
+  current_plot <- reactiveVal(NULL)
+  
   # Update choices when data is loaded
   observe({
     req(merged_data())
@@ -22,24 +29,34 @@ violin_plot_server <- function(input, output, session, merged_data) {
       plot_data <- data_for_plot %>%
         filter(Assay == input$violin_protein)
       
-      output$violin_plot <- renderPlot({
-        ggplot(plot_data, aes(x = !!sym(input$violin_group), y = NPX, fill = !!sym(input$violin_group))) +
-          geom_violin(trim = FALSE) +
-          geom_boxplot(width = 0.1, fill = "white") +
-          labs(title = paste("Violin Plot for", input$violin_protein),
-               x = input$violin_group,
-               y = "NPX Value") +
-          theme_minimal() +
-          theme(legend.position = "none")
-      })
+      p <- ggplot(plot_data, aes(x = !!sym(input$violin_group), y = NPX, fill = !!sym(input$violin_group))) +
+        geom_violin(trim = FALSE) +
+        geom_boxplot(width = 0.1, fill = "white") +
+        labs(title = paste("Violin Plot for", input$violin_protein),
+             x = input$violin_group,
+             y = "NPX Value") +
+        theme_minimal() +
+        theme(legend.position = "none")
+
+      current_plot(p)
+      
+      # Log analysis
+      log_analysis(analysis_log, "Violin Plots", 
+                   paste("Protein:", input$violin_protein, "| Group:", input$violin_group),
+                   plot = p)
+      
+      output$violin_plot <- renderPlot({ p })
       incProgress(1)
     })
   })
   
   output$download_violin <- downloadHandler(
-    filename = function() { paste("violin_plot_", Sys.Date(), ".png", sep="") },
+    filename = function() { 
+      paste0("olinkWrapper_", VERSION, "_ViolinPlot_", input$violin_protein, "_", input$violin_group, "_", format(Sys.Date(), "%Y%m%d"), ".png") 
+    },
     content = function(file) {
-      ggsave(file, plot = last_plot(), device = "png", width = 10, height = 8)
+      req(current_plot())
+      ggsave(file, plot = current_plot(), device = "png", width = 10, height = 8)
     }
   )
 }

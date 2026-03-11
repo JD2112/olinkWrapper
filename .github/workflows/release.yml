@@ -1,0 +1,49 @@
+name: Release and Deploy Docs
+
+on:
+  push:
+    paths:
+      - 'VERSION'  # Only runs when the version file changes
+
+permissions:
+  contents: write  # needed to push tags and commit docs
+
+jobs:
+  tag-and-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Version
+        id: get_version
+        run: echo "VERSION=$(cat VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Create Git Tag
+        env:
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag -a v${VERSION} -m "Release v${VERSION}"
+          git push origin v${VERSION}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install MkDocs and Mike
+        run: |
+          pip install mkdocs-material mike
+
+      - name: Deploy Versioned Docs
+        env:
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          mike deploy --push --update-aliases ${VERSION} latest

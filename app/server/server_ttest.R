@@ -1,16 +1,16 @@
-ttest_server <- function(input, output, session, merged_data, ttest_results) {
+ttest_server <- function(input, output, session, merged_data, ttest_results, analysis_log) {
   
+  # App Version
+  VERSION <- APP_VERSION  # Set globally by version.R
+
   # Update grouping variable choices when data is loaded
   observe({
     req(merged_data())
     vars <- colnames(merged_data())
-    # Filter for columns that might be grouping variables (not too many unique values)
-    # But for now, let's just provide all columns.
     updateSelectInput(session, "ttest_var", choices = vars)
   })
 
   observeEvent(input$run_ttest, {
-    print("T-test button clicked")
     withProgress(message = 'Running T-Test...', value = 0, {
       tryCatch({
         req(merged_data(), input$ttest_var)
@@ -30,33 +30,37 @@ ttest_server <- function(input, output, session, merged_data, ttest_results) {
           data_for_test[[input$ttest_var]] <- as.character(data_for_test[[input$ttest_var]])
         } 
         
-        print("Running olink_ttest function")
         results <- olink_ttest(data_for_test, variable = input$ttest_var)
         
         if (nrow(results) == 0) {
           stop("T-test returned no results. Check if data is properly normalized and group sizes are sufficient.")
         }
 
-        ttest_results(results)  # Store results in reactive value
+        ttest_results(results)
+        
+        # Log analysis
+        log_analysis(analysis_log, "T-Test", 
+                     paste("Variable:", input$ttest_var, "| Type:", input$ttest_var_type),
+                     table = results)
         
         output$ttest_output <- renderDT({
           datatable(results, 
+            extensions = 'Buttons',
             options = list(
-                         paging = TRUE,
-                         searching = TRUE,
-                         fixedColumns = TRUE,
-                         autowidth = TRUE,
-                         ordering = TRUE,
-                         dom = 'Bflrtip',
-                         lengthMenu = list(c(10, 25, 50, 100, -1), c('10', '25', '50', '100','All')),
-                         scrollX = TRUE,
-                         buttons = list(
-                           list(extend = "excel", text = "Download current page", 
-                                filename = "T-test Analysis",
-                                exportOptions = list(
-                                  modifier = list(page = "current")
-                                ))))
-                                )
+              paging = TRUE,
+              searching = TRUE,
+              fixedColumns = TRUE,
+              autowidth = TRUE,
+              ordering = TRUE,
+              dom = 'Bflrtip',
+              lengthMenu = list(c(10, 25, 50, 100, -1), c('10', '25', '50', '100','All')),
+              scrollX = TRUE,
+              buttons = list(
+                list(extend = "excel", text = "Download current page", 
+                     filename = paste0("olinkWrapper_", VERSION, "_T-Test_", input$ttest_var, "_", format(Sys.Date(), "%Y%m%d")),
+                     exportOptions = list(modifier = list(page = "current")))
+              )
+            ))
         })
         
         incProgress(1)
@@ -68,10 +72,12 @@ ttest_server <- function(input, output, session, merged_data, ttest_results) {
   })
   
   output$download_ttest <- downloadHandler(
-    filename = function() { paste("ttest_results_", Sys.Date(), ".xlsx", sep="") },
+    filename = function() { 
+      paste0("olinkWrapper_", VERSION, "_T-Test_", input$ttest_var, "_", format(Sys.Date(), "%Y%m%d"), ".xlsx") 
+    },
     content = function(file) {
       req(ttest_results())
-      write_xlsx(list(ttest_results = ttest_results()), file)
+      writexl::write_xlsx(list(ttest_results = ttest_results()), file)
     }
   )
 }

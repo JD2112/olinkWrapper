@@ -1,6 +1,8 @@
-lod_integration_server <- function(input, output, session, merged_data) {
+lod_integration_server <- function(input, output, session, merged_data, exclusion_log = NULL) {
   
-  # Reactive value to store proteins with >50% below LOD
+  # App Version
+  VERSION <- APP_VERSION  # Set globally by version.R
+
   below_lod_proteins <- reactiveVal(NULL)
   
   observeEvent(input$integrate_lod, {
@@ -10,19 +12,14 @@ lod_integration_server <- function(input, output, session, merged_data) {
       tryCatch({
         data <- merged_data()
         
-        # 1. Column Name Normalization
-        # Try to find SampleID and Assay columns even if they have underscores
         if (!"SampleID" %in% colnames(data) && "Sample_ID" %in% colnames(data)) {
            data <- data %>% rename(SampleID = Sample_ID)
         }
         
-        # 2. Check if LOD already exists
         if ("LOD" %in% colnames(data)) {
-          showNotification("LOD column already exists. Using existing values.", type = "message")
+          showNotification("LOD column already exists.", type = "message")
           data_with_lod <- data
         } else {
-          # Attempt to integrate LOD using OlinkAnalyze
-          # Map dummy metadata columns required by olink_lod()
           required_metadata <- c("SampleType", "DataAnalysisRefID", "SampleQC", "AssayType")
           for (col in required_metadata) {
             if (!(col %in% colnames(data))) {
@@ -32,22 +29,15 @@ lod_integration_server <- function(input, output, session, merged_data) {
             }
           }
           
-          # Try to calculate or merge LOD
-          # If this fails because of negative controls, it means we don't have the ref data
           data_with_lod <- tryCatch({
             olink_lod(data)
           }, error = function(e) {
-            msg <- paste("LOD calculation failed:", e$message, 
-                         "\nTip: Ensure your input file has an 'LOD' column OR contains at least 10 Negative Control samples.")
-            stop(msg)
+            stop(paste("LOD calculation failed:", e$message, "\nTip: Ensure your input file has an 'LOD' column OR contains at least 10 Negative Control samples."))
           })
         }
 
-        
         merged_data(data_with_lod)
         
-        # 3. Calculate percentage below LOD
-        # Ensure we use valid column names for the calculation
         lod_stats <- data_with_lod %>%
           group_by(Assay) %>%
           summarize(
@@ -62,13 +52,21 @@ lod_integration_server <- function(input, output, session, merged_data) {
         
         output$lod_integration_results <- renderPrint({
           cat("LOD information processed.\n")
-          cat("Number of samples:", length(unique(data_with_lod$SampleID)), "\n")
-          cat("Number of assays:", length(unique(data_with_lod$Assay)), "\n")
           cat("Proteins with >50% below LOD:", nrow(high_below_lod), "\n")
         })
         
         output$below_lod_table <- DT::renderDataTable({
-          DT::datatable(high_below_lod, options = list(pageLength = 10)) %>%
+          DT::datatable(high_below_lod, 
+                       extensions = 'Buttons',
+                       options = list(
+                         pageLength = 10,
+                         dom = 'Bflrtip',
+                         buttons = list(
+                           list(extend = "excel", text = "Download current page", 
+                                filename = paste0("olinkWrapper_", VERSION, "_LOD_Summary_", format(Sys.Date(), "%Y%m%d")),
+                                exportOptions = list(modifier = list(page = "current")))
+                         )
+                       )) %>%
             DT::formatRound("PercentBelowLOD", 2)
         })
         
@@ -83,18 +81,25 @@ lod_integration_server <- function(input, output, session, merged_data) {
     req(merged_data(), below_lod_proteins())
     
     proteins_to_remove <- below_lod_proteins()$Assay
-    if (length(proteins_to_remove) == 0) {
-      showNotification("No proteins to remove.", type = "message")
-      return()
-    }
+    if (length(proteins_to_remove) == 0) return()
     
     withProgress(message = 'Filtering proteins...', value = 0, {
-      new_data <- merged_data() %>%
-        filter(!(Assay %in% proteins_to_remove))
-      
+      before_data <- merged_data()
+      new_data <- before_data %>% filter(!(Assay %in% proteins_to_remove))
       merged_data(new_data)
-      showNotification(paste("Removed", length(proteins_to_remove), "proteins."), type = "message")
       
+      # Log exclusion
+      if (!is.null(exclusion_log)) {
+        current_log <- exclusion_log()
+        current_log[[length(current_log) + 1]] <- list(
+          step      = "LOD Filtering",
+          timestamp = format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          description = paste("Removed", length(proteins_to_remove), "proteins (>50% below LOD)."),
+          proteins_excluded = proteins_to_remove
+        )
+        exclusion_log(current_log)
+      }
+
       below_lod_proteins(NULL)
       output$below_lod_table <- DT::renderDataTable(NULL)
       incProgress(1)

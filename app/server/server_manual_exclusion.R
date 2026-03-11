@@ -1,6 +1,6 @@
 # Manual Exclusion Server
 
-manual_exclusion_server <- function(input, output, session, merged_data) {
+manual_exclusion_server <- function(input, output, session, merged_data, exclusion_log = NULL) {
   
   # Reactive values to store exclusion lists
   samples_to_exclude <- reactiveVal(character(0))
@@ -21,9 +21,9 @@ manual_exclusion_server <- function(input, output, session, merged_data) {
     }
     
     # Add controls if checkbox is selected
-    if (input$exclude_all_controls && "SampleType" %in% colnames(data)) {
+    if (input$exclude_all_controls && "Sample_Type" %in% colnames(data)) {
       control_samples <- data %>%
-        filter(SampleType == "CONTROL") %>%
+        filter(toupper(as.character(Sample_Type)) %in% c("CONTROL", "CTRL", "C")) %>%
         distinct(SampleID) %>%
         pull(SampleID)
       exclude_list <- c(exclude_list, control_samples)
@@ -167,12 +167,46 @@ manual_exclusion_server <- function(input, output, session, merged_data) {
       updateCheckboxInput(session, "exclude_all_controls", value = FALSE)
       
       showNotification(
-        paste("Exclusions applied:", length(samples_exclude), "samples and", 
+        paste("Exclusions applied:", length(samples_exclude), "samples and",
               length(proteins_exclude), "proteins removed."),
         type = "message",
         duration = 5
       )
-      
+
+      # Append to shared exclusion log
+      if (!is.null(exclusion_log)) {
+        controls_excluded <- input$exclude_all_controls
+        manual_sample_text  <- if (!is.null(input$manual_exclude_samples) && input$manual_exclude_samples != "")
+          input$manual_exclude_samples else "(none)"
+        manual_protein_text <- if (!is.null(input$manual_exclude_proteins) && input$manual_exclude_proteins != "")
+          input$manual_exclude_proteins else "(none)"
+
+        current_log <- exclusion_log()
+        current_log[[length(current_log) + 1]] <- list(
+          step      = "B. Preprocessing > 5. Manual Exclusion",
+          timestamp = format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          description = paste0(
+            "Manually excluded samples and/or proteins. ",
+            if (controls_excluded) "All control samples (SampleType CONTROL/CTRL/C) were excluded. " else "",
+            "Manual sample IDs entered: ", manual_sample_text, ". ",
+            "Manual protein IDs entered: ", manual_protein_text, "."
+          ),
+          samples_excluded  = samples_exclude,
+          proteins_excluded = proteins_exclude,
+          before = list(samples = original_samples, proteins = original_proteins, rows = nrow(merged_data())),
+          after  = list(
+            samples  = length(unique(data$SampleID)),
+            proteins = length(unique(data$Assay)),
+            rows     = nrow(data)
+          ),
+          notes = if (controls_excluded)
+            "'Exclude all control samples' checkbox was checked."
+          else
+            "'Exclude all control samples' checkbox was NOT checked."
+        )
+        exclusion_log(current_log)
+      }
+
       incProgress(1)
     })
   })

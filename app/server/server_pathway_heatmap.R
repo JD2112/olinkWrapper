@@ -1,5 +1,4 @@
-pathway_heatmap_server <- function(input, output, session, shared_enrichment_results, ttest_results) {
-  
+pathway_heatmap_server <- function(input, output, session, shared_enrichment_results, ttest_results, analysis_log) {
   print("Pathway Heatmap Server: Function started")
   
   # Check if t-test and enrichment analysis have been run
@@ -54,7 +53,12 @@ pathway_heatmap_server <- function(input, output, session, shared_enrichment_res
         number_of_terms = input$pathway_heatmap_number_of_terms
       )
       print("Pathway heatmap generated successfully")
-      print(paste("Class of heatmap:", class(heatmap)))
+      
+      # Log analysis
+      log_analysis(analysis_log, "Pathway Heatmap", 
+                   paste("Method:", input$pathway_heatmap_method, "| Keyword:", input$pathway_heatmap_keyword),
+                   plot = heatmap)
+      
       heatmap
     }, error = function(e) {
       print(paste("Error in olink_pathway_heatmap:", e$message))
