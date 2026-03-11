@@ -1,0 +1,1733 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Shiny app for Olink data analysis">
+      
+      
+        <meta name="author" content="Jyotirmoy Das">
+      
+      
+        <link rel="canonical" href="https://olink-wrapper.serve.scilifelab.se/1.3.0/user_guide/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../parameters/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Getting Started - olinkWrapper</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../styles/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#getting-started" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="olinkWrapper" class="md-header__button md-logo" aria-label="olinkWrapper" data-md-component="logo">
+      
+
+<a href="https://github.com/JD2112" target="_blank" style="display:flex; align-items:center; text-decoration:none;">
+  <img src="../images/JD_logo.png" alt="Logo" style="height:24px; margin-right:8px;">
+</a>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            olinkWrapper
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Getting Started
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/JD2112/olinkWrapper" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../parameters/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Parameters
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../output/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Output
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="olinkWrapper" class="md-nav__button md-logo" aria-label="olinkWrapper" data-md-component="logo">
+      
+
+<a href="https://github.com/JD2112" target="_blank" style="display:flex; align-items:center; text-decoration:none;">
+  <img src="../images/JD_logo.png" alt="Logo" style="height:24px; margin-right:8px;">
+</a>
+    </a>
+    olinkWrapper
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/JD2112/olinkWrapper" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+  
+  <li class="md-nav__item">
+    
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+    
+    
+    
+  </li>
+
+  
+  <li class="md-nav__item">
+    
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#analysis-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analysis configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analysis configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-data-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Data Preview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A. Data Preview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exclude-qc-warnings-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exclude QC warnings samples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dataset Explorer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#b-preprocessing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Preprocessing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="B. Preprocessing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-bridge-selector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1 Bridge Selector:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2 Normalization:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-lod-limit-of-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3 LOD (Limit of Detection):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-outlier-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4 Outlier Detection:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c-statistical-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Statistical Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="C. Statistical Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-descriptive-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Descriptive Statistics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-normality-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Normality Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-t-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. T-test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-wilcoxon-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Wilcoxon Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-anova-analysis-of-variance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ANOVA (Analysis of Variance):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-anova-post-hoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. ANOVA Post-hoc:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-linear-mixed-effects-lme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Linear Mixed Effects (LME):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-lme-post-hoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. LME Post-hoc
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#d-exploratory-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        D. Exploratory Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="D. Exploratory Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pca-plot-principal-component-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. PCA Plot (Principal Component Analysis):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-umap-plot-uniform-manifold-approximation-and-projection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. UMAP Plot (Uniform Manifold Approximation and Projection):
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-visualization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E. Visualization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="E. Visualization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-box-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Box Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-distribution-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Distribution Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-lme-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. LME Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-pathway-heatmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Pathway Heatmap:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-qc-plot-quality-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. QC Plot (Quality Control):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-heatmap-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Heatmap Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-volcano-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Volcano Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-violin-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Violin Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#f-pathway-enrichment-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F. Pathway Enrichment Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#g-linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        G. Linear Regression
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#h-analysis-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H. Analysis Report
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+    
+    
+    
+  </li>
+
+  
+  <li class="md-nav__item">
+    
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parameters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parameters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+    
+    
+    
+  </li>
+
+  
+  <li class="md-nav__item">
+    
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Output
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+    
+    
+    
+  </li>
+
+
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#analysis-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analysis configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analysis configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-data-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Data Preview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A. Data Preview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exclude-qc-warnings-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exclude QC warnings samples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dataset Explorer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#b-preprocessing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Preprocessing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="B. Preprocessing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-bridge-selector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1 Bridge Selector:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2 Normalization:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-lod-limit-of-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3 LOD (Limit of Detection):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-outlier-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4 Outlier Detection:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c-statistical-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Statistical Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="C. Statistical Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-descriptive-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Descriptive Statistics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-normality-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Normality Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-t-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. T-test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-wilcoxon-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Wilcoxon Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-anova-analysis-of-variance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ANOVA (Analysis of Variance):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-anova-post-hoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. ANOVA Post-hoc:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-linear-mixed-effects-lme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Linear Mixed Effects (LME):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-lme-post-hoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. LME Post-hoc
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#d-exploratory-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        D. Exploratory Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="D. Exploratory Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pca-plot-principal-component-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. PCA Plot (Principal Component Analysis):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-umap-plot-uniform-manifold-approximation-and-projection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. UMAP Plot (Uniform Manifold Approximation and Projection):
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-visualization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E. Visualization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="E. Visualization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-box-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Box Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-distribution-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Distribution Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-lme-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. LME Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-pathway-heatmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Pathway Heatmap:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-qc-plot-quality-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. QC Plot (Quality Control):
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-heatmap-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Heatmap Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-volcano-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Volcano Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-violin-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Violin Plot:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#f-pathway-enrichment-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F. Pathway Enrichment Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#g-linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        G. Linear Regression
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#h-analysis-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H. Analysis Report
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+  
+    <a href="https://github.com/JD2112/olinkWrapper/edit/master/docs/user_guide.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
+<details class="important" open="open">
+<summary>Note to Users</summary>
+<p>For each analysis, a progress bar will appear to indicate that calculations are in progress.</p>
+<ul>
+<li>If any errors occur during analysis, an error message will be displayed.</li>
+<li>Make sure your data is properly formatted before uploading:<ul>
+<li><strong>NPX Data</strong> should contain columns for <code>SampleID</code>, <code>Assay</code>, and <code>NPX</code> values.</li>
+<li><strong>Key File</strong> should map <code>SampleID</code> to <code>SUBJID</code> (Subject Identifier).</li>
+<li><strong>Variables File</strong> should contain additional variables for each <code>SUBJID</code> (Subject Identifier).</li>
+<li><strong>NPX Data 2</strong> is optional and should contain columns for <code>SampleID</code>, <code>Assay</code>, and <code>NPX</code> values. For bridge selecotr, normalization or LME analysis, you need to upload NPX Data 2.</li>
+</ul>
+</li>
+</ul>
+<p>This app provides a user-friendly interface for comprehensive analysis of Olink™ data.  </p>
+</details>
+<h2 id="analysis-configuration">Analysis configuration<a class="headerlink" href="#analysis-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="data-input">Data Input<a class="headerlink" href="#data-input" title="Permanent link">&para;</a></h3>
+<div class="grid-container">
+<div class="sidebar-content">
+<p>The app requires specific data files to begin analysis.</p>
+<ul>
+<li>Upload NPX Data (CSV)</li>
+<li>Upload Key File (CSV, optional)</li>
+<li>Upload Variables File (CSV)</li>
+</ul>
+<p>Please check the <a href="../#usage">Usage</a> for more details about the input files.</p>
+</div>
+<div class="sidebar">
+<p><img alt="Data Upload" src="../images/1.3.0/0_Data_Upload.png" width="80%" /></p>
+</div>
+</div>
+<h3 id="processing">Processing<a class="headerlink" href="#processing" title="Permanent link">&para;</a></h3>
+<p>After uploading your files, click <strong>"Merge NPX &amp; Variables"</strong> button to combine them into a single dataset for analysis. You can preview the merged data in the <strong>A. Data Preview</strong> tab.</p>
+<details class="tip" open="open">
+<summary>Tip</summary>
+<p>Using key file is optional but recommended to use as it reduces the computation time and memory usage. The NPX data file is quiet big and if you have large number of variables, it is recommended to use key file.</p>
+</details>
+<h2 id="a-data-preview">A. Data Preview<a class="headerlink" href="#a-data-preview" title="Permanent link">&para;</a></h2>
+<h3 id="exclude-qc-warnings-samples">Exclude QC warnings samples<a class="headerlink" href="#exclude-qc-warnings-samples" title="Permanent link">&para;</a></h3>
+<h3 id="dataset-explorer">Dataset Explorer<a class="headerlink" href="#dataset-explorer" title="Permanent link">&para;</a></h3>
+<h2 id="b-preprocessing">B. Preprocessing<a class="headerlink" href="#b-preprocessing" title="Permanent link">&para;</a></h2>
+<p>This section allows you to clean and prepare your data for statistical analysis.</p>
+<h3 id="1-bridge-selector">1 <strong>Bridge Selector:</strong><a class="headerlink" href="#1-bridge-selector" title="Permanent link">&para;</a></h3>
+<p>The bridge selection function selects a number of bridge samples based on the input data. Bridge samples are used to normalize two dataframes/projects that have been ran at different time points, hence, a batch effect is expected. It selects samples that have good detectability (if applicable), pass quality control, and cover a wide range of data points.</p>
+<p><strong>How to run:</strong> 
+- Select the target number of sampels, default: 8
+- Select mamimum allowed missing frequency, default: 0.1
+- Clcik "Identify Bridge Samples" button to identify the bridge samples.
+- The bridge samples will be displayed in the table below.</p>
+<h3 id="2-normalization">2 <strong>Normalization:</strong><a class="headerlink" href="#2-normalization" title="Permanent link">&para;</a></h3>
+<p>The Olink® normalization function normalizes NPX values between two different datasets or one Olink® dataset to a set of reference medians.</p>
+<details class="warning" open="open">
+<summary>normalization</summary>
+<p><code>olinkWrapper</code> provides normalization only on selected method and reference Sample ID. For detailed information about normalization, please refer to the Olink® documentation.</p>
+</details>
+<details class="info">
+<summary>Normalization from Olink</summary>
+<p>The function handles four different types of normalization:</p>
+<ul>
+<li><strong>Bridging normalization</strong>: One of the dataframes is adjusted to another using overlapping samples (bridge samples). The overlapping samples should have the same IDs between dataframes. Adjustment is made using the median of the paired differences between the bridge samples. For more information on bridging, consult the Introduction to bridging Olink® NPX datasets tutorial.</li>
+<li><strong>Subset normalization</strong>: A subset of samples is used to normalize two dataframes, one of which is used as a reference_project. Adjustment is made using the differences of medians between the sample subsets from the two dataframes. Subset normalization is useful if no bridge samples were included and one can assume that the distribution of the two datasets is very similar.</li>
+<li><strong>Reference median normalization</strong>: Works only on one dataframe. This is effectively subset normalization, but using difference of medians to pre-recorded median values. df1, overlapping_samples_df1 and reference_medians need to be specified.</li>
+<li><strong>Cross-product bridging</strong>: Similar to bridging normalization but bridging across products, for example bridging Explore 3072 data to Explore HT data. Overlapping samples are run on both products and used to determine which assays are bridgeable and what method should be used to bridge each assay. For more information on the between-product bridging methodology, consult the Bridging across NGS-based Olink® products Tutorial.</li>
+</ul>
+</details>
+<h3 id="3-lod-limit-of-detection">3 <strong>LOD (Limit of Detection):</strong><a class="headerlink" href="#3-lod-limit-of-detection" title="Permanent link">&para;</a></h3>
+<p>The <code>olink_lod</code> function adds LOD information to an Explore HT or Explore 3072 NPX dataframe. This function can incorporate LOD based on either an Explore dataset’s negative controls or using predetermined fixed LOD values, which can be downloaded from the Document Download Center at olink.com, or using both methods. The default LOD calculation method is based off of the negative controls. If an NPX file is intensity normalized, both intensity normalized and PC normalized LODs are provided.</p>
+<p><strong>How to run:</strong> </p>
+<ul>
+<li>To find out proteins with &gt;50% LOD values, click on 'integrate LOD data'.</li>
+<li>Results will be displayed in a table.</li>
+<li>Use the "Download Results" button to save the LOD results as an Excel file.</li>
+<li>Use the "removed flagged proteins" button to exclude the proteins with &gt;50% LOD values.</li>
+</ul>
+<h3 id="4-outlier-detection">4 <strong>Outlier Detection:</strong><a class="headerlink" href="#4-outlier-detection" title="Permanent link">&para;</a></h3>
+<p>This tool helps you identify samples that are statistically unusual, which may be due to experimental errors or biological outliers.</p>
+<ul>
+<li><strong>UMAP Distances:</strong> The app uses Uniform Manifold Approximation and Projection (UMAP) to visualize sample clusters and calculate distances between samples. </li>
+<li><strong>Automatic Highlighting:</strong> Samples that fall beyond a specific standard deviation threshold are automatically highlighted as potential outliers.</li>
+<li><strong>Exclusion:</strong> You can exclude these samples with a single click, and they will be removed from all subsequent plots and statistical tests.</li>
+</ul>
+<p><strong>How to run:</strong> </p>
+<ul>
+<li>Selecte the standard deviation threshold, default: 2.5</li>
+<li>Click "Run Outlier Detection" button to run the analysis.</li>
+<li>The outliers will be highlighted in the UMAP plot.</li>
+<li>You can exclude the outliers by clicking on the "Exclude Outliers" button.</li>
+</ul>
+<h2 id="c-statistical-analysis">C. Statistical Analysis<a class="headerlink" href="#c-statistical-analysis" title="Permanent link">&para;</a></h2>
+<p>The app provides several common statistical tests to find meaningful differences in your data.</p>
+<h3 id="1-descriptive-statistics">1. Descriptive Statistics<a class="headerlink" href="#1-descriptive-statistics" title="Permanent link">&para;</a></h3>
+<h3 id="2-normality-test">2. Normality Test<a class="headerlink" href="#2-normality-test" title="Permanent link">&para;</a></h3>
+<p>This test determines if your data follows a normal (bell-shaped) distribution. Many parametric tests, like the T-test and ANOVA, assume normality.</p>
+<ul>
+<li><strong>Statistical Tests:</strong> Choose between <strong>Shapiro-Wilk</strong> (best for small samples) and <strong>Kolmogorov-Smirnov</strong> (against a normal distribution) tests.</li>
+<li><strong>Visual Feedback:</strong> Each analysis generates both a <strong>Histogram</strong> (with a red density curve) and a <strong>QQ-plot</strong> to help you qualitatively assess normality.</li>
+<li><strong>"All Proteins" Mode:</strong> You can visualize the distribution of every single data point in your dataset at once to see the global data layout.</li>
+</ul>
+<h3 id="3-t-test">3. T-test<a class="headerlink" href="#3-t-test" title="Permanent link">&para;</a></h3>
+<p>The olink_ttest function performs a Welch 2-sample t-test or paired t-test at confidence level 0.95 for every protein (by OlinkID) for a given grouping variable. It corrects for multiple testing using the Benjamini-Hochberg method (“fdr”). Adjusted p-values are logically evaluated towards adjusted p-value &lt; 0.05. The resulting t-test table is arranged by ascending p-values.</p>
+<p><strong>How to run:</strong> </p>
+<ul>
+<li>Navigate to the "T-Test" tab.</li>
+<li>Select a grouping variable and specify its type (Character or Factor).</li>
+<li>Click "Run T-Test" to perform the analysis.</li>
+<li>Results will be displayed in a table.</li>
+<li>Use the "Download Results" button to save the T-Test results as an Excel file.</li>
+</ul>
+<h3 id="4-wilcoxon-test">4. Wilcoxon Test<a class="headerlink" href="#4-wilcoxon-test" title="Permanent link">&para;</a></h3>
+<p>The olink_wilcox function performs a 2-sample Mann-Whitney U test or paired Mann-Whitney U test at confidence level 0.95 for every protein (by OlinkID) for a given grouping variable. It corrects for multiple testing using the Benjamini-Hochberg method (“fdr”). Adjusted p-values are logically evaluated towards adjusted p-value&lt;0.05. The resulting Mann-Whitney U table is arranged by ascending p-values.</p>
+<p><strong>How to run:</strong> </p>
+<ul>
+<li>Navigate to the "Wilcoxon Test" tab.</li>
+<li>Select a grouping variable and specify its type (Character or Factor).</li>
+<li>Select from the drop down menu <code>Two Sided</code> (<strong>default</strong>), <code>Greater</code>, or <code>Less</code>.</li>
+<li>Click "Run Wilcoxon Test" to perform the analysis.</li>
+<li>Results will be displayed in a table.</li>
+<li>Use the "Download Results" button to save the Wilcoxon Test results as an Excel file.</li>
+</ul>
+<h3 id="5-anova-analysis-of-variance">5. ANOVA (Analysis of Variance):<a class="headerlink" href="#5-anova-analysis-of-variance" title="Permanent link">&para;</a></h3>
+<p>The olink_anova function performs an ANOVA F-test for each assay (by OlinkID) using Type III sum of squares. The function handles both factor and numerical variables, and/or confounding factors.</p>
+<ul>
+<li><strong>Requirement:</strong> Samples with missing variable information or factor levels are excluded from the analysis. Character columns in the input data frame are converted to factors.</li>
+</ul>
+<p>Control samples and control assays should be removed before using this function.</p>
+<ul>
+<li>
+<p><strong>Crossed/interaction analysis, i.e. A*B formula notation, is inferred from the variable argument in the following cases:</strong></p>
+<ul>
+<li><code>c(‘A’,‘B’)</code></li>
+<li><code>c(‘A:B’)</code></li>
+<li><code>c(‘A:B’, ‘B’) or c(‘A:B’, ‘A’)</code></li>
+<li>For covariates, crossed analyses need to be specified explicitly, i.e. two main effects will not be expanded with a <code>c(‘A’,‘B’)</code> notation. Main effects present in the variable take precedence.</li>
+</ul>
+</li>
+<li>
+<p>Adjusted p-values are calculated using the Benjamini &amp; Hochberg (1995) method (<code>fdr</code>). The threshold is determined by logic evaluation of <code>Adjusted_pval &lt; 0.05</code>. Covariates are not included in the p-value adjustment.</p>
+</li>
+</ul>
+<p><strong>How to run:</strong></p>
+<ul>
+<li>In the "ANOVA" tab, select a grouping variable and its type.</li>
+<li>Choose the number of covariates (0-4, max.5) if needed.</li>
+<li>If covariates are selected, choose the covariate variables from the dropdown menus.</li>
+<li>Click "Run ANOVA" to perform the analysis.</li>
+<li>Results will be displayed in a table.</li>
+<li>Use the "Download Results" button to save the ANOVA results as an Excel file.</li>
+</ul>
+<h3 id="6-anova-post-hoc">6. ANOVA Post-hoc:<a class="headerlink" href="#6-anova-post-hoc" title="Permanent link">&para;</a></h3>
+<p>olink_anova_posthoc performs a post-hoc ANOVA test with Tukey p-value adjustment per assay (by OlinkID) at confidence level 0.95.</p>
+<p>The function handles both factor and numerical variables and/or covariates. The post-hoc test for a numerical variable compares the difference in means of the outcome variable (default: NPX) for 1 standard deviation (SD) difference in the numerical variable, e.g. mean NPX at mean (numerical variable) versus mean NPX at mean (numerical variable) + 1*SD (numerical variable).</p>
+<p>Control samples and control assays (AssayType is not “assay”, or Assay contains “control” or “ctrl”) should be removed before using this function.</p>
+<details class="warning" open="open">
+<summary>ANOVA Post-hoc</summary>
+<p>Please ensure you have run the ANOVA test before attempting to run the ANOVA Post-hoc test, as it relies on the results from that analysis.</p>
+</details>
+<p><strong>How to run:</strong> 
+After running ANOVA (with significant results), </p>
+<ul>
+<li>Select <code>Effect Variable</code> from the drop-down menu,</li>
+<li>Check if you want to run only on significant results, (<strong>default: checked</strong>)</li>
+<li>Select the <code>Adjustment</code> method from the drop-down menu, (<strong>default: Tukey</strong>)</li>
+<li>Check if you want to <code>calculate Group Means</code> (<strong>default: unchecked</strong>)</li>
+<li><em>Custom Assay List</em>: If you want to run the analysis on a subset of assays, you can provide a list of assays to the <code>Assay List</code> argument. The assays should be separated by commas.</li>
+<li>Click "Run ANOVA Post-hoc" to perform the analysis.</li>
+<li>Results will be displayed in a table.</li>
+<li>Use the "Download Results" button to save the ANOVA Post-hoc results as an Excel file.</li>
+</ul>
+<h3 id="7-linear-mixed-effects-lme">7. Linear Mixed Effects (LME):<a class="headerlink" href="#7-linear-mixed-effects-lme" title="Permanent link">&para;</a></h3>
+<p>The olink_lmer fits a linear mixed effects model for every protein (by OlinkID) in every panel. The function handles both factor and numerical variables and/or covariates.</p>
+<p>Samples with missing variable information or factor levels are excluded from the analysis. Character columns in the input data frame are converted to factors.</p>
+<p>Crossed/interaction analysis, i.e. A*B formula notation, is inferred from the variable argument in the following cases:</p>
+<ul>
+<li><code>c('A','B')</code></li>
+<li><code>c('A:B')</code></li>
+<li><code>c('A:B', 'B')</code> or <code>c('A:B', 'A')</code>
+For covariates, crossed analyses need to be specified explicitly, i.e. two main effects will not be expanded with a <code>c('A','B')</code> notation. Main effects present in the variable take precedence.</li>
+</ul>
+<p>Adjusted p-values are calculated using the Benjamini &amp; Hochberg (1995) method (<code>fdr</code>). The threshold is determined by logic evaluation of <code>Adjusted_pval &lt; 0.05</code>. Covariates are not included in the p-value adjustment.</p>
+<p><strong>How to run:</strong> </p>
+<ul>
+<li>Select <code>Outcome Variable</code> from the drop-down menu (<strong>default: NPX</strong>)</li>
+<li>Select <code>Fixed Effects</code> from the drop-down menu.</li>
+<li>Select <code>Random Effects</code> from the drop-down menu.</li>
+<li>Click "Run LME" to perform the analysis.</li>
+<li>Results will be displayed in a table.</li>
+<li>Use the "Download Results" button to save the LME results as an Excel file.</li>
+</ul>
+<h3 id="8-lme-post-hoc">8. LME Post-hoc<a class="headerlink" href="#8-lme-post-hoc" title="Permanent link">&para;</a></h3>
+<p>Use the post-hoc function to find specific differences.</p>
+<h2 id="d-exploratory-analysis">D. Exploratory Analysis<a class="headerlink" href="#d-exploratory-analysis" title="Permanent link">&para;</a></h2>
+<p>Exploratory analysis helps you visualize the overall structure of your data and find patterns without making specific assumptions.</p>
+<h3 id="1-pca-plot-principal-component-analysis">1. PCA Plot (Principal Component Analysis):<a class="headerlink" href="#1-pca-plot-principal-component-analysis" title="Permanent link">&para;</a></h3>
+<p>PCA is a method that reduces the dimensionality of your data, allowing you to visualize hundreds of proteins in a simple 2D or 3D plot. Samples that are similar in protein expression will cluster together.</p>
+<p><strong>How to run:</strong> Select the variables to color or shape your plot and click "PCA."</p>
+<h3 id="2-umap-plot-uniform-manifold-approximation-and-projection">2. UMAP Plot (Uniform Manifold Approximation and Projection):<a class="headerlink" href="#2-umap-plot-uniform-manifold-approximation-and-projection" title="Permanent link">&para;</a></h3>
+<p>Similar to PCA, UMAP is a non-linear dimensionality reduction technique that is often more effective at revealing complex relationships and clusters in your data.</p>
+<p><strong>How to run:</strong> Select your grouping variables and click "UMAP."</p>
+<h2 id="e-visualization">E. Visualization<a class="headerlink" href="#e-visualization" title="Permanent link">&para;</a></h2>
+<p>The app generates a variety of plots to help you understand and present your results.</p>
+<h3 id="1-box-plot">1. Box Plot:<a class="headerlink" href="#1-box-plot" title="Permanent link">&para;</a></h3>
+<p>A box plot provides a quick visual summary of the distribution of NPX values for a single protein across different groups, showing the median, quartiles, and outliers.</p>
+<h3 id="2-distribution-plot">2. Distribution Plot:<a class="headerlink" href="#2-distribution-plot" title="Permanent link">&para;</a></h3>
+<p>This plot, often a histogram or density plot, shows the frequency distribution of NPX values for a given protein.</p>
+<h3 id="3-lme-plot">3. LME Plot:<a class="headerlink" href="#3-lme-plot" title="Permanent link">&para;</a></h3>
+<p>This plot visualizes the results of a Linear Mixed Effects model, often showing the protein expression change over time or across different conditions, accounting for within-subject variability.</p>
+<h3 id="4-pathway-heatmap">4. Pathway Heatmap:<a class="headerlink" href="#4-pathway-heatmap" title="Permanent link">&para;</a></h3>
+<p>A heatmap is a color-coded matrix that shows the expression levels of proteins involved in a specific biological pathway. It requires you to first run a Pathway Enrichment Analysis.</p>
+<div class="admonition important">
+<p class="admonition-title">Pathway Heatmap</p>
+<p>Please ensure you have run the Pathway Enrichment Analysis before attempting to create a Pathway Heatmap, as it relies on the results from that analysis.</p>
+</div>
+<h3 id="5-qc-plot-quality-control">5. QC Plot (Quality Control):<a class="headerlink" href="#5-qc-plot-quality-control" title="Permanent link">&para;</a></h3>
+<p>This plot helps you assess the quality of your data, often by showing the overall NPX distribution across all samples or assays.</p>
+<h3 id="6-heatmap-plot">6. Heatmap Plot:<a class="headerlink" href="#6-heatmap-plot" title="Permanent link">&para;</a></h3>
+<p>A general heatmap that displays the expression of many proteins across many samples, allowing you to see global patterns and clusters of co-expressed proteins.</p>
+<h3 id="7-volcano-plot">7. Volcano Plot:<a class="headerlink" href="#7-volcano-plot" title="Permanent link">&para;</a></h3>
+<p>A key visualization for T-test or Wilcoxon results. It plots the statistical significance against the magnitude of change (estimate) for all proteins.</p>
+<ul>
+<li><strong>Dynamic P-value Selection:</strong> Choose to plot either <strong>Adjusted P-values (FDR)</strong> or <strong>Unadjusted P-values</strong> on the Y-axis. The significance threshold line and point colors will update automatically.</li>
+<li><strong>Flexible Threshold:</strong> Adjust the significance threshold (e.g., 0.05 vs 0.01) to see the horizontal line and highlighted proteins move in real-time.</li>
+<li><strong>Custom Coloring:</strong> Significant proteins are highlighted in <strong>Red</strong>, while non-significant ones are in <strong>Grey</strong>, making it easy to identify relevant biomarkers.</li>
+<li><strong>Smart Annotation:</strong> Toggle protein labels to annotate the top significant proteins using <code>ggrepel</code> to ensure labels don't overlap.</li>
+</ul>
+<h3 id="8-violin-plot">8. Violin Plot:<a class="headerlink" href="#8-violin-plot" title="Permanent link">&para;</a></h3>
+<p>Similar to a box plot, but it also shows the density of the data at different NPX values, providing a more detailed look at the data distribution.</p>
+<ul>
+<li>In the "Violin Plot" tab, select a protein and a grouping variable.</li>
+<li>Specify the variable type for the grouping variable.</li>
+<li>Click "Generate Violin Plot" to create the plot.</li>
+<li>Use the "Download Plot" button to save the Violin plot.</li>
+</ul>
+<h2 id="f-pathway-enrichment-analysis">F. Pathway Enrichment Analysis<a class="headerlink" href="#f-pathway-enrichment-analysis" title="Permanent link">&para;</a></h2>
+<p>This is a powerful method to go beyond individual protein analysis. It uses your list of significantly changed proteins (identified by a <strong>T-test</strong> or <strong>Wilcoxon test</strong>) and compares them to known biological pathways. It tells you which pathways are significantly represented in your list of proteins, helping you interpret your findings in a biological context.</p>
+<div class="admonition warning">
+<p class="admonition-title">Pathway Enrichment Analysis</p>
+<p>Please ensure you have run either the T-test or Wilcoxon test before attempting to run the Pathway Enrichment Analysis, as it relies on the results from those analyses.</p>
+</div>
+<h2 id="g-linear-regression">G. Linear Regression<a class="headerlink" href="#g-linear-regression" title="Permanent link">&para;</a></h2>
+<p>Linear regression is used to model the relationship between a protein's NPX value (dependent variable) and one or more other variables (independent variables), such as age, BMI, or a clinical score. This helps you identify proteins whose levels are associated with continuous variables.</p>
+<h2 id="h-analysis-report">H. Analysis Report<a class="headerlink" href="#h-analysis-report" title="Permanent link">&para;</a></h2>
+<p>This section provides a comprehensive summary of all the analyses performed in the session. It includes all the tables and plots generated in the previous sections, allowing you to download them all in one place.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+  <div style="
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 1.5em;
+    padding: 1em 2em;
+    border-top: 1px solid #000000;
+    color: #ffffff;
+    text-align: center;
+    background-color: #000000;
+  ">
+    <div style="flex: 1; text-align: left;">
+        © Jyotirmoy Das 2026 
+    </div>
+    <div style="flex: 1; text-align: center;">
+      <code style="font-size: 0.8em;">
+        3D1F C87F 8D52 BFD4 5A1D <br> 3C86 63F2 2E14 6A0A 6B98
+      </code>
+    </div>
+    <div style="flex: 1; text-align: right;">
+      Made with <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" style="color: #ffffff;">MkDocs</a>
+    </div>
+  </div>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.tracking", "navigation.expand", "navigation.sections", "navigation.top", "content.code.annotate", "content.tabs.link", "navigation.tabs", "search.suggest", "search.highlight", "content.action.edit", "content.code.copy", "versioning", "icons"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://fonts.googleapis.com/css2?family=Fira+Code&amp;family=Inter:wght@400;600&amp;display=swap"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+        <script src="../js/github-stats.js"></script>
+      
+    
+  </body>
+</html>
