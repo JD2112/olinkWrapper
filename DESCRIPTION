@@ -1,0 +1,33 @@
+Package: olinkWrapper
+Title: olinkWrapper provides a user-friendly interface for performing quick analysis of Olink data
+Version: 1.3.0
+Authors@R: 
+    person("Jyotirmoy", "Das", , "jyotirmoy21@gmail.com", role = c("aut", "cre"))
+Description: olinkWrapper provides a user-friendly interface for performing quick analysis of Olink data using the OlinkAnalyze package. It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs in comprehensive PDF report.
+License: `use_mit_license()`,
+Encoding: UTF-8
+LazyData: true
+Imports:
+    shiny,
+    bslib,
+    OlinkAnalyze,
+    tidyverse,
+    msigdbr,
+    plotly,
+    viridis,
+    writexl,
+    lme4,
+    lmerTest,
+    shinyjs,
+    DT,
+    broom,
+    purrr,
+    ggrepel,
+    patchwork,
+    ggplot2,
+    dplyr,
+    umap
+Remotes:
+    bioc::clusterProfiler
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3

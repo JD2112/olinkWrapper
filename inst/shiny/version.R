@@ -22,7 +22,7 @@ version_file <- if (file.exists("/srv/VERSION")) {
 APP_VERSION <- if (!is.null(version_file)) {
     trimws(readLines(version_file, n = 1, warn = FALSE))
 } else {
-    "1.5.2" # Fallback if VERSION file is missing
+    "1.3.0" # Fallback if VERSION file is missing
 }
 
 message(paste0("[olinkWrappeR] Version: ", APP_VERSION))
