@@ -1,0 +1,6 @@
+bibentry("Manual",
+         title = "olinkWrappeR: User-Friendly Interface for Performing Quick Analysis of Olink Data",
+         author = person("Jyotirmoy", "Das"),
+         year = "2025",
+         note = "R package version 1.3.0",
+         url = "https://github.com/JD2112/olinkWrapper")

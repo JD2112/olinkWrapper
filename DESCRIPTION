@@ -1,10 +1,11 @@
 Package: olinkWrapper
-Title: olinkWrapper provides a user-friendly interface for performing quick analysis of Olink data
+Title: User-Friendly Interface for Performing Quick Analysis of Olink Data
 Version: 1.3.0
-Authors@R: 
-    person("Jyotirmoy", "Das", , "jyotirmoy21@gmail.com", role = c("aut", "cre"))
-Description: olinkWrapper provides a user-friendly interface for performing quick analysis of Olink data using the OlinkAnalyze package. It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs in comprehensive PDF report.
-License: `use_mit_license()`,
+Author: Jyotirmoy Das [aut, cre]
+Maintainer: Jyotirmoy Das <jyotirmoy21@gmail.com>
+Authors@R: person("Jyotirmoy", "Das", email = "jyotirmoy21@gmail.com", role = c("aut", "cre"))
+Description: Provides a user-friendly interface for performing quick analysis of Olink data using the 'OlinkAnalyze' package. It allows for data upload, parameter customization, visualization of results, and exporting of analysis outputs in a comprehensive PDF report.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports:
@@ -26,8 +27,7 @@ Imports:
     patchwork,
     ggplot2,
     dplyr,
-    umap
-Remotes:
-    bioc::clusterProfiler
+    umap,
+    clusterProfiler
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3

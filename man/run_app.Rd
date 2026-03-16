@@ -9,3 +9,8 @@ run_app()
 \description{
 Launch the olinkWrapper Shiny App
 }
+\examples{
+if (interactive()) {
+  run_app()
+}
+}

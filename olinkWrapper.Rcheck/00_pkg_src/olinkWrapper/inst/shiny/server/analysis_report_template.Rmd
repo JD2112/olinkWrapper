@@ -1,0 +1,274 @@
+---
+title: ""
+date: ""
+output:
+  pdf_document:
+    latex_engine: xelatex
+    number_sections: true
+    toc: false 
+bibliography: references.bib
+link-citations: true
+header-includes:
+  - \usepackage{fontspec}
+  - \PassOptionsToPackage{table,xcdraw}{xcolor}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{afterpage}
+  - \usepackage{longtable}
+  - \usepackage{booktabs}
+  - \setmainfont{TeX Gyre Pagella}
+  - \usepackage{fancyhdr}
+  - \usepackage{titlesec}
+  - \usepackage{wallpaper}
+  - \usepackage{graphicx}
+  - \usepackage{tikz}
+  - \usepackage{geometry}
+  - \usepackage{hyperref}
+  - \usepackage{fontawesome5}
+  - \usepackage{array}
+  - \usepackage{caption}
+  - \definecolor{headerblue}{RGB}{0, 51, 102}
+  - \definecolor{subblue}{RGB}{51, 102, 153}
+  - \pagestyle{fancy}
+  - \fancyhf{}
+  - \renewcommand{\headrulewidth}{0pt}
+  - \renewcommand{\footrulewidth}{0pt}
+  - \titleformat{\section}{\color{headerblue}\normalfont\Large\bfseries}{\thesection}{1em}{}
+  - \titleformat{\subsection}{\color{subblue}\normalfont\large\bfseries}{\thesubsection}{1em}{}
+params:
+  analysis_log: NULL
+  version: "1.3.0"
+  img_path: "/srv/shiny-server/www/ppin.png"
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(kableExtra)
+library(digest)
+
+# Force kableExtra to use LaTeX packages correctly
+options(kableExtra.latex.load_packages = FALSE)
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+log <- params$analysis_log
+analysis_hash <- digest(log, algo = "sha256")
+methods_used <- unique(sapply(log, function(x) x$step))
+```
+
+\begin{titlepage}
+    \newgeometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+    \begin{tikzpicture}[remember picture,overlay]
+        % Top decorative bar
+        \fill[headerblue] (current page.north west) rectangle ([yshift=-1cm]current page.north east);
+        
+        % Main Title
+        \node[anchor=north west, text=headerblue] at ([xshift=2cm, yshift=-3cm]current page.north west) {
+            \parbox{17cm}{
+                {\fontsize{34}{40} \selectfont \bfseries olinkWrapper} \\
+                \vspace{0.3cm}
+                {\large \textcolor{headerblue!50}{\rule{17cm}{2pt}}} \\
+                \vspace{0.3cm}
+                {\Large \bfseries \color{subblue} Comprehensive Analysis Report}
+            }
+        };
+
+        % Center Figure (ppin.png)
+        \node[anchor=center] at (current page.center) {
+            \includegraphics[width=15cm]{`r params$img_path`}
+        };
+
+        % Bottom Metadata Block
+        \node[anchor=south west] at ([xshift=2cm, yshift=5cm]current page.south west) {
+            \parbox{17cm}{
+                \begin{minipage}[t]{0.33\textwidth}
+                    \textbf{\textcolor{headerblue}{Report Date}} \\
+                    `r format(Sys.Date(), "%B %d, %Y")`
+                \end{minipage}
+                \begin{minipage}[t]{0.33\textwidth}
+                    \textbf{\textcolor{headerblue}{Software Version}} \\
+                    OlinkWrapper v`r params$version`
+                \end{minipage}
+                \begin{minipage}[t]{0.33\textwidth}
+                    \textbf{\textcolor{headerblue}{App Developer}} \\
+                    Jyotirmoy Das
+                \end{minipage}
+            }            
+        };
+
+        % Disclaimer
+        \node[anchor=south west] at ([xshift=2cm, yshift=3.5cm]current page.south west) {
+            \parbox{17cm}{
+                \textbf{Disclaimer:} Please remember \textbf{olinkWrapper} is based on the \textcolor{headerblue}{\textbf{\href{https://github.com/Olink-Proteomics/OlinkRPackage}{OlinkAnalyze}}} package from the Olink Developers. Please cite/use the original package.
+            }
+        };
+        
+        % Bottom Citation
+        \node[anchor=south west] at ([xshift=2cm, yshift=2.5cm]current page.south west) {
+          \parbox{17cm}{
+            \begin{minipage}[t]{0.5\textwidth}
+              \textcolor{headerblue}{\faGlobe} {\href{https://olink-wrapper.serve.scilifelab.se/}{olink-wrapper.serve.scilifelab.se}}
+            \end{minipage}
+             \begin{minipage}[t]{0.5\textwidth}
+              \textcolor{headerblue}{\faGithub} {\href{https://github.com/JD2112/olinkWrapper}{github.com/JD2112/olinkWrapper}}
+            \end{minipage}
+          }
+        };
+
+        \node[anchor=south west] at ([xshift=2cm, yshift=1.5cm]current page.south west) {
+          \parbox{17cm}{            
+              \small \textcolor{black}{\href{https://doi.org/10.5281/zenodo.15098644}{Zenodo: 15098644}}
+          }
+        };
+
+        % Bottom decorative bar
+        \fill[headerblue] (current page.south west) rectangle ([yshift=1cm]current page.south east);
+    \end{tikzpicture}
+\end{titlepage}
+
+\restoregeometry
+\newpage
+\ClearWallPaper
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[C]{
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[headerblue] (current page.north west) rectangle ([yshift=-1.2cm]current page.north east);
+    \node[anchor=north east, text=white] at ([xshift=-1cm, yshift=-0.4cm]current page.north east) {OlinkWrapper v`r params$version` };
+  \end{tikzpicture}
+}
+
+\fancyfoot[C]{
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[headerblue] (current page.south west) rectangle ([yshift=1.2cm]current page.south east);
+    \node[anchor=south west, text=white] at ([xshift=1cm, yshift=0.4cm]current page.south west) {\small \thepage};
+    \node[anchor=south east, text=white] at ([xshift=-1cm, yshift=0.4cm]current page.south east) {\small Citation: \href{https://doi.org/10.5281/zenodo.15098644}{Zenodo: 15098644}};
+  \end{tikzpicture}
+}
+
+\newpage
+\mbox{}
+\vfill
+
+\textbf{\textcolor{headerblue}{Report generated by olinkWrappeR on `r Sys.time()`}}
+
+\textbf{\textcolor{headerblue}{If you're using OlinkWrapper, please cite: \href{https://doi.org/10.5281/zenodo.15098644}{Zenodo: 15098644}}}
+
+\newpage
+\vspace*{1cm}
+
+\tableofcontents
+\newpage
+
+
+# Introduction
+
+The **olinkWrapper** application is built upon the *OlinkAnalyze* R package [@olinkanalyze] that builds on the Olink® Proximity Extension Assay (PEA) technology platform - a high-throughput, multiplex immunoassay system enabling simultaneous quantification of up to 96 proteins per panel with high specificity and sensitivity. [@assarsson2014].
+
+The underlying analytical framework relies on the **OlinkAnalyze** R package developed by Olink Proteomics, which implements statistical workflows for NPX data including normalization, differential expression testing, linear modeling, and pathway enrichment. [@olinkwebsite].
+
+This report documents all computational steps, statistical analyses, and visualizations performed during the current analytical session.
+
+\textbf{\textcolor{headerblue}{NOTE}}: 
+
+1. Please check the \underline{\href{https://jd2112.github.io/olinkWrapper/latest/}{olinkWrapper manual}} for more information about how to proceed with the analysis and how to interpret the results.
+
+2. This report \textbf{DOES NOT} contain the preprocessing analysis steps that you can download as a separate report.
+
+
+# Analysis Workflow
+
+```{r analysis-loop, results='asis'}
+# Definition of step descriptions
+step_backgrounds <- list(
+  "Descriptive Stats" = "Provides a global statistical summary of the dataset, including mean, median, quartiles, and range for all variables. It helps in understanding the overall data characteristics.",
+  "Normality Test" = "Assesses whether the NPX distribution for a given protein or the overall dataset follows a normal distribution. This is crucial for determining whether to use parametric (e.g., T-test, ANOVA) or non-parametric (e.g., Wilcoxon) tests.",
+  "T-Test" = "The olink_ttest function performs a Welch 2-sample t-test or paired t-test at confidence level 0.95 for every protein (by OlinkID) for a given grouping variable. It corrects for multiple testing using the Benjamini-Hochberg method (“fdr”). Adjusted p-values are logically evaluated towards adjusted p-value < 0.05. The resulting t-test table is arranged by ascending p-values.",
+  "Wilcoxon Rank Sum" = "The olink_wilcox function performs a 2-sample Mann-Whitney U test or paired Mann-Whitney U test at confidence level 0.95 for every protein (by OlinkID) for a given grouping variable. It corrects for multiple testing using the Benjamini-Hochberg method (“fdr”). Adjusted p-values are logically evaluated towards adjusted p-value<0.05. The resulting Mann-Whitney U table is arranged by ascending p-values.",
+  "ANOVA" = "The olink_anova function performs an ANOVA F-test for each assay (by OlinkID) using Type III sum of squares. The function handles both factor and numerical variables, and/or confounding factors. Samples with missing variable information or factor levels are excluded from the analysis. Character columns in the input data frame are converted to factors. Control samples and control assays should be removed before using this function. Crossed/interaction analysis, i.e. A*B formula notation, is inferred from the variable argument in the following cases: c(‘A’,‘B’), c(‘A:B’), c(‘A:B’, ‘B’) or c(‘A:B’, ‘A’). For covariates, crossed analyses need to be specified explicitly, i.e. two main effects will not be expanded with a c(‘A’,‘B’) notation. Main effects present in the variable take precedence. Adjusted p-values are calculated using the Benjamini & Hochberg (1995) method (“fdr”). The threshold is determined by logic evaluation of Adjusted_pval < 0.05. Covariates are not included in the p-value adjustment.",
+  "ANOVA Post-hoc" = "olink_anova_posthoc performs a post-hoc ANOVA test with Tukey p-value adjustment per assay (by OlinkID) at confidence level 0.95. The function handles both factor and numerical variables and/or covariates. The post-hoc test for a numerical variable compares the difference in means of the outcome variable (default: NPX) for 1 standard deviation (SD) difference in the numerical variable, e.g. mean NPX at mean (numerical variable) versus mean NPX at mean (numerical variable) + 1*SD (numerical variable).Control samples and control assays (AssayType is not “assay”, or Assay contains “control” or “ctrl”) should be removed before using this function.",
+  "LME" = "The olink_lme function performs a linear mixed-effects model for each assay (by OlinkID) at confidence level 0.95. The function handles both factor and numerical variables, and/or confounding factors. The model is fitted using the lme4 package and the lmer function. The model formula is constructed from the variable argument. The function supports both fixed and random effects. The random effects are specified by including random = list(Subject = 'identity') in the lmer call. The function handles both factor and numerical variables, and/or confounding factors. The model formula is constructed from the variable argument. The function supports both fixed and random effects. The random effects are specified by including random = list(Subject = 'identity') in the lmer call.",
+  "LME Post-hoc" = "The olink_lme_posthoc function performs a post-hoc linear mixed-effects model for each assay (by OlinkID) at confidence level 0.95. The function handles both factor and numerical variables, and/or confounding factors. The model is fitted using the lme4 package and the lmer function. The model formula is constructed from the variable argument. The function supports both fixed and random effects. The random effects are specified by including random = list(Subject = 'identity') in the lmer call. The function handles both factor and numerical variables, and/or confounding factors. The model formula is constructed from the variable argument. The function supports both fixed and random effects. The random effects are specified by including random = list(Subject = 'identity') in the lmer call.",
+  "LME Plots" = "Visualizes the fitted values or predictions from Linear Mixed Effects models, helping to interpret complex interactions or longitudinal trends.",
+  "PCA Plot" = "Generates PCA projection of all samples from NPX data along two principal components (default PC2 vs PC1) colored by the variable specified by color_g (default QC_Warning) and including the percentage of explained variance. By default, the values are scaled and centered in the PCA and proteins with missing NPX values removed from the corresponding assay(s). Unique sample names are required. Imputation by median value is done for assays with missingness <10% and for multi-plate projects, and for missingness <5% for single plate projects.",
+  "UMAP Plot" = "The olink_umap function performs Uniform Manifold Approximation and Projection (UMAP) on the NPX data. It reduces the dimensionality of the data to two dimensions for visualization purposes. The function can handle both factor and numerical variables, and/or confounding factors. The model is fitted using the umap function from the umap package. The model formula is constructed from the variable argument. The function supports both fixed and random effects. The random effects are specified by including random = list(Subject = 'identity') in the lmer call. The function handles both factor and numerical variables, and/or confounding factors. The model formula is constructed from the variable argument. The function supports both fixed and random effects. The random effects are specified by including random = list(Subject = 'identity') in the lmer call.",
+  "Outlier Detection" = "Identifies potential outlier samples using multivariate distance analysis (UMAP and PCA based). Removing technical outliers ensures that downstream statistical results are not skewed by anomalous data points.",
+  "Heatmap" = "The olink_heatmap function generates a heatmap of NPX values for a selected list of proteins. The heatmap is created using the heatmap function from the base R stats package. The heatmap is created using the heatmap function from the base R stats package. The heatmap is created using the heatmap function from the base R stats package.",
+  "Volcano Plot" = "The olink_volcano_plot function generates a volcano plot using results from the olink_ttest function. The estimated difference is shown in the x-axis and -log10(p-value) in the y-axis. The horizontal dotted line indicates p-value = 0.05. Dots are colored based on significance following Benjamini-Hochberg adjustment with a p-value cutoff of 0.05. Significant assays after adjustment can optionally be annotated by OlinkID.",
+  "Pathway Enrichment" = "The olink_pathway_enrichment function can be used to perform Gene Set Enrichment Analysis (GSEA) or Over-representation Analysis (ORA) using MSigDB, Reactome, KEGG, or GO. MSigDB includes curated gene sets (C2) and ontology gene sets (C5) which encompasses Reactome, KEGG, and GO. This function performs enrichment using the gsea or enrich functions from clusterProfiler from BioConductor. The function uses the estimate from a previous statistical analysis for one contrast for all proteins. MSigDB is subset if ontology is KEGG, GO, or Reactome. test_results must contain estimates for all assays. Posthoc results can be used but should be filtered for one contrast to improve interpretability. Alternative statistical results can be used as input as long as they include the columns “OlinkID”, “Assay”, and “estimate”. A column named “Adjusted_pal” is also needed for ORA. Any statistical results that contains one estimate per protein will work as long as the estimates are comparable to each other.",
+  "Linear Regression" = "The olink_linear_regression function performs a linear regression for each assay (by OlinkID) at confidence level 0.95. The function handles both factor and numerical variables, and/or confounding factors. The model is fitted using the lm function. The model formula is constructed from the variable argument. The function supports both fixed and random effects. The random effects are specified by including random = list(Subject = 'identity') in the lmer call. The function handles both factor and numerical variables, and/or confounding factors. The model formula is constructed from the variable argument. The function supports both fixed and random effects. The random effects are specified by including random = list(Subject = 'identity') in the lmer call.",
+  "Boxplots" = "The olink_boxplot function is used to generate boxplots of NPX values stratified on a variable for a given list of proteins. In order to annotate the plot with ANOVA posthoc analysis results (i.e. include statistical asterisks in the plot), control samples and control assays should be removed from the data.",
+  "Distribution Plot" = "The olink_distribution_plot function is used to generate distribution plots of NPX values for a given list of proteins. The distribution plot is a histogram of the NPX values for each protein. The distribution plot is a good way to visualize the distribution of the NPX values for each protein.",
+  "Pathway Heatmap" = "The olink_pathway_heatmap function generates a heatmap of proteins related to pathways using the enrichment results from the olink_pathway_enrichment function. Either the top terms can be visualized or terms containing a certain keyword. For each term, the proteins in the test_result data frame that are related to that term will be visualized by their estimate. This visualization can be used to determining how many proteins of interest are involved in a particular pathway and in which direction their estimates are.",
+  "QC Plot" = "Uses Control IDs and internal standards to assess the technical quality of the proteomics run, ensuring data reliability.",
+  "Violin Plots" = "The olink_violin_plot function is used to generate violin plots of NPX values stratified on a variable for a given list of proteins. In order to annotate the plot with ANOVA posthoc analysis results (i.e. include statistical asterisks in the plot), control samples and control assays should be removed from the data."
+)
+
+
+if (is.null(log) || length(log) == 0) {
+  cat("No analytical steps recorded.")
+} else {
+  for (i in seq_along(log)) {
+    entry <- log[[i]]
+    background <- step_backgrounds[[entry$step]]
+
+    cat("## Step ", i, ": ", entry$step, "\n\n", sep = "")
+    cat("**Timestamp:** ", entry$timestamp, "\n\n")
+
+    # Background Section
+    if (!is.null(background)) {
+      cat("### Background\n\n")
+      cat(background, "\n\n")
+    }
+
+    if (!is.null(entry$description) && nchar(entry$description) > 0) {
+      cat("### Execution Parameters\n\n")
+      cat(entry$description, "\n\n")
+    }
+
+    # 1. Visualization Logic: Load PNG from path
+    if (!is.null(entry$plot_path) && file.exists(entry$plot_path)) {
+      cat("### Visualization\n\n")
+      cat("\\begin{center}\n")
+      cat(paste0("\\includegraphics[width=0.85\\textwidth]{", entry$plot_path, "}\n"))
+      cat("\\end{center}\n\n")
+    }
+
+    # 2. Table Logic: Landscape for wide tables
+    if (!is.null(entry$table) && nrow(entry$table) > 0) {
+      cat("### Results Table (Preview)\n\n")
+      cat("NOTE: This is a preview of the results table. The full results table can be downloaded from the app.\n\n")
+      n_cols <- ncol(entry$table)
+
+      if (n_cols > 8) {
+        cat("\\begin{landscape}\n\\footnotesize\n")
+        print(kable(entry$table, "latex", booktabs = TRUE, longtable = TRUE) %>%
+          kable_styling(latex_options = c("striped")))
+        cat("\\end{landscape}\n")
+      } else {
+        print(kable(entry$table, "latex", booktabs = TRUE, longtable = TRUE) %>%
+          kable_styling(latex_options = c("striped", "scale_down")))
+      }
+    }
+    cat("\\newpage\n")
+  }
+}
+```
+
+
+
+# Session Information
+
+```{r session-info}
+sessionInfo()
+```
+
+\newpage
+
+# References
+
+\bibliography{references.bib}
+
+
+

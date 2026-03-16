@@ -1,0 +1,80 @@
+# ShinyOlink
+
+## How to Use
+
+This Shiny app is designed for comprehensive analysis of Olink proteomics data. Follow these steps to use the app effectively:
+
+### 1. Data Upload and Merging
+
+- In the sidebar, you'll find three file upload buttons:
+  - Upload NPX Data (CSV)
+  - Upload Key File (CSV)
+  - Upload Variables File (CSV)
+- Upload your files in CSV format using these buttons.
+- After uploading all three files, click the "Merge Data" button to combine the datasets.
+
+### 2. Data Preview
+
+- After merging, you can view a preview of your merged data in the "Data Preview" tab.
+
+### 3. Descriptive Statistics
+
+- Navigate to the "Descriptive Statistics" tab.
+- Click "Run Descriptive Statistics" to generate summary statistics for your data.
+
+### 4. Normality Test
+
+- Go to the "Normality Test" tab.
+- Select a protein from the dropdown menu.
+- Click "Run Normality Test" to perform a Shapiro-Wilk test and generate a histogram for the selected protein.
+- You can download the normality plot using the "Download Plot" button.
+
+### 5. PCA Plot
+
+- In the "PCA Plot" tab, select a variable for coloring the plot points.
+- Choose the variable type (Character, Factor, or Numeric).
+- Optionally, check "Label Points" to add labels to the plot.
+- Click "Run PCA" to generate the plot.
+- Use the "Download Plot" button to save the PCA plot.
+
+### 6. T-Test
+
+- Navigate to the "T-Test" tab.
+- Select a grouping variable and specify its type (Character or Factor).
+- Click "Run T-Test" to perform the analysis.
+- Results will be displayed in a table.
+- Use the "Download Results" button to save the T-Test results as an Excel file.
+
+### 7. ANOVA
+
+- In the "ANOVA" tab, select a grouping variable and its type.
+- Choose the number of covariates (0-4) if needed.
+- If covariates are selected, choose the covariate variables from the dropdown menus.
+- Click "Run ANOVA" to perform the analysis.
+- Results will be displayed in a table.
+- Use the "Download Results" button to save the ANOVA results as an Excel file.
+
+### 8. Volcano Plot
+
+- Go to the "Volcano Plot" tab.
+- Select a grouping variable and its type.
+- Click "Generate Volcano Plot" to create the plot.
+- Use the "Download Plot" button to save the Volcano plot.
+
+### 9. Violin Plot
+
+- In the "Violin Plot" tab, select a protein and a grouping variable.
+- Specify the variable type for the grouping variable.
+- Click "Generate Violin Plot" to create the plot.
+- Use the "Download Plot" button to save the Violin plot.
+
+### Notes:
+
+- For each analysis, a progress bar will appear to indicate that calculations are in progress.
+- If any errors occur during analysis, an error message will be displayed.
+- Make sure your data is properly formatted before uploading:
+  - NPX Data should contain columns for SampleID, Assay, and NPX values.
+  - Key File should map SampleID to SUBJID.
+  - Variables File should contain additional variables for each SUBJID.
+
+This app provides a user-friendly interface for comprehensive analysis of Olink data. If you encounter any issues or have questions about the results, please consult with a statistician or bioinformatician for proper interpretation.

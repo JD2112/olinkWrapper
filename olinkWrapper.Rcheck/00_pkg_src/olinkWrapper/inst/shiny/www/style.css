@@ -1,0 +1,210 @@
+/* olinkWrappeR Professional UI Theme */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #004e92;
+  --secondary: #006FB7;
+  --accent: #00AEEF;
+  --success: #10B981;
+  --bg-color: #f8fafc;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --sidebar-bg: #eef0f3;
+  --border-radius: 12px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  background: linear-gradient(135deg, #040404 0%, #04022f 100%);
+  background-attachment: fixed;
+}
+
+/* Elegant Headings */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.025em;
+}
+
+/* Sidebar Customization */
+.bslib-sidebar-layout .sidebar {
+  background-color: var(--sidebar-bg) !important;
+  color: #010a13 !important;
+  border-right: none !important;
+  /* padding-top: 2rem; */
+}
+
+.bslib-sidebar-layout .sidebar h2,
+.bslib-sidebar-layout .sidebar .sidebar-title {
+  color: var(--accent) !important;
+  font-size: 1.25rem;
+  /* margin-bottom: 2rem; */
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.fa-dna,
+.fa-microscope,
+.fa-vials,
+.fa-project-diagram {
+  animation: float 4s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* Premium Navigation */
+.nav-pills .nav-link {
+  border-radius: 8px;
+  margin-right: 8px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-pills .nav-link:hover {
+  background-color: rgba(0, 78, 146, 0.1);
+  color: var(--primary);
+}
+
+.nav-pills .nav-link.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 78, 146, 0.3);
+}
+
+/* Cards & Containers */
+.card {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.card-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  padding: 1rem 1.25rem;
+}
+
+
+/* Form Elements & Dropdowns */
+.form-control,
+.selectize-input,
+.selectize-dropdown {
+  border-radius: 8px !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 0.6rem !important;
+  transition: all 0.2s !important;
+  background-color: #ffffff !important;
+  /* Solid background for visibility */
+  color: #1e293b !important;
+}
+
+.selectize-dropdown-content .option {
+  padding: 8px 12px !important;
+}
+
+.selectize-dropdown-content .active {
+  background-color: #f1f5f9 !important;
+  color: var(--primary) !important;
+}
+
+.form-control:focus,
+.selectize-input.focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.1) !important;
+}
+
+/* Sidebar Aggressive Tightening */
+.bslib-sidebar-layout .sidebar .shiny-input-container {
+  margin-bottom: 0.2rem !important;
+  margin-top: 0.1rem !important;
+}
+
+.compact-uploads .shiny-input-container {
+  margin-bottom: 0 !important;
+}
+
+.compact-uploads .form-group {
+  margin-bottom: 0.2rem !important;
+}
+
+/* Fix dropdown menu visibility */
+.selectize-dropdown {
+  background-color: #ffffff !important;
+  z-index: 2000 !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Start Page Specific */
+.glass-card {
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Footer */
+.footer {
+  background: white;
+  border-top: 1px solid #e2e8f0;
+  padding: 4rem 0;
+  margin-top: 4rem;
+}
+
+.footer a {
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.footer a:hover {
+  color: var(--primary);
+  text-decoration: none;
+}

@@ -1,0 +1,37 @@
+* installing *source* package ‘olinkWrapper’ ...
+** this is package ‘olinkWrapper’ version ‘1.3.0’
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+Warning: replacing previous import ‘broom::bootstrap’ by ‘bslib::bootstrap’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘lme4::lmer’ by ‘lmerTest::lmer’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘ggplot2::last_plot’ by ‘plotly::last_plot’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘clusterProfiler::simplify’ by ‘purrr::simplify’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘DT::dataTableOutput’ by ‘shiny::dataTableOutput’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘DT::renderDataTable’ by ‘shiny::renderDataTable’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘shiny::runExample’ by ‘shinyjs::runExample’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘lme4::show’ by ‘shinyjs::show’ when loading ‘olinkWrapper’
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+Warning: replacing previous import ‘broom::bootstrap’ by ‘bslib::bootstrap’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘lme4::lmer’ by ‘lmerTest::lmer’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘ggplot2::last_plot’ by ‘plotly::last_plot’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘clusterProfiler::simplify’ by ‘purrr::simplify’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘DT::dataTableOutput’ by ‘shiny::dataTableOutput’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘DT::renderDataTable’ by ‘shiny::renderDataTable’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘shiny::runExample’ by ‘shinyjs::runExample’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘lme4::show’ by ‘shinyjs::show’ when loading ‘olinkWrapper’
+** testing if installed package can be loaded from final location
+Warning: replacing previous import ‘broom::bootstrap’ by ‘bslib::bootstrap’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘lme4::lmer’ by ‘lmerTest::lmer’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘ggplot2::last_plot’ by ‘plotly::last_plot’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘clusterProfiler::simplify’ by ‘purrr::simplify’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘DT::dataTableOutput’ by ‘shiny::dataTableOutput’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘DT::renderDataTable’ by ‘shiny::renderDataTable’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘shiny::runExample’ by ‘shinyjs::runExample’ when loading ‘olinkWrapper’
+Warning: replacing previous import ‘lme4::show’ by ‘shinyjs::show’ when loading ‘olinkWrapper’
+** testing if installed package keeps a record of temporary installation path
+* DONE (olinkWrapper)
